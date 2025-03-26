@@ -1,0 +1,47 @@
+<!-- Botão para adicionar -->
+<p-button label="Adicionar Documento" icon="pi pi-plus" (onClick)="showDialog()"></p-button>
+
+<!-- Campo de busca -->
+<div style="margin: 20px 0;">
+  <p-inputText [(ngModel)]="searchQuery" placeholder="Pesquisar por título ou categoria"></p-inputText>
+</div>
+
+<!-- Tabela de documentos -->
+<p-table [value]="filteredDocuments" [tableStyle]="{'min-width': '50rem'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Categoria</th>
+      <th>Data</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-document>
+    <tr>
+      <td>{{document.id}}</td>
+      <td>{{document.title}}</td>
+      <td>{{document.category}}</td>
+      <td>{{document.date}}</td>
+      <td>
+        <p-button icon="pi pi-pencil" styleClass="p-button-warning" (onClick)="showDialog(document)" ></p-button>
+        <p-button icon="pi pi-trash" styleClass="p-button-danger" (onClick)="deleteDocument(document)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Diálogo para adicionar/editar documento -->
+<p-dialog [header]="isEditMode ? 'Editar Documento' : 'Novo Documento'" [(visible)]="displayDialog" [modal]="true" [style]="{width: '30vw'}">
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <p-inputText [(ngModel)]="selectedDocument.title" placeholder="Título do documento"></p-inputText>
+    <p-inputText [(ngModel)]="selectedDocument.category" placeholder="Categoria"></p-inputText>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayDialog=false" styleClass="p-button-secondary"></p-button>
+    <p-button label="Salvar" icon="pi pi-check" (onClick)="saveDocument()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Componente de confirmação -->
+<p-confirmDialog></p-confirmDialog>
