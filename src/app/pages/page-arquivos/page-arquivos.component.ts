@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-page-table',
-  templateUrl: './page-table.component.html',
-  styleUrls: ['./page-table.component.css']
+  selector: 'app-page-arquivos',
+  templateUrl: './page-arquivos.component.html',
+  styleUrls: ['./page-arquivos.component.css']
 })
-export class PageTableComponent  {
-
+export class PageArquivosComponent {
   isSidebarCollapsed = false; 
 
   constructor() { }

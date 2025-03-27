@@ -23,7 +23,21 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FileUploadModule } from 'primeng/fileupload'; // Adicionado
 import { ConfirmationService } from 'primeng/api';
-
+import { TooltipModule } from 'primeng/tooltip';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { ArquivosComponent } from './components/arquivos/arquivos.component';
+import { PaginatorModule } from 'primeng/paginator';
+import { PageArquivosComponent } from './pages/page-arquivos/page-arquivos.component';
+import { AvatarModule } from 'primeng/avatar';
+import { HeaderComponent } from './components/header/header.component';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { UsuarioComponent } from './components/usuario/usuario.component';
+import { PageUserComponent } from './pages/page-user/page-user.component';
+import { BadgeModule } from 'primeng/badge';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { TagModule } from 'primeng/tag';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +47,12 @@ import { ConfirmationService } from 'primeng/api';
     LoginComponent,
     TableComponent,
     SidebarComponent,
-    PageTableComponent
+    PageTableComponent,
+    ArquivosComponent,
+    PageArquivosComponent,
+    HeaderComponent,
+    UsuarioComponent,
+    PageUserComponent
   ],
   imports: [
     BrowserModule,
@@ -49,11 +68,20 @@ import { ConfirmationService } from 'primeng/api';
     SidebarModule,
     DropdownModule,
     CalendarModule,
+    TooltipModule,
     TabViewModule,
     InputTextareaModule,
-    FileUploadModule // Adicionado
+    FileUploadModule,
+    ToastModule,
+    PaginatorModule,
+    AvatarModule,
+    MultiSelectModule,
+    BadgeModule,
+    CardModule,
+    DividerModule,
+    TagModule
   ],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService,MessageService ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,0 +1,73 @@
+<div class="user-profile-wrapper">
+  <!-- Bloco principal -->
+  <div class="user-profile-block">
+    <!-- Capa -->
+    <div class="profile-cover"></div>
+
+    <!-- Avatar flutuando -->
+    <div class="avatar-container">
+      <p-avatar
+        [label]="getAvatarInitials()"
+        shape="circle"
+        size="xlarge"
+        styleClass="avatar-image"
+      ></p-avatar>
+    </div>
+
+    <!-- Ações -->
+    <div class="action-buttons">
+      <button
+    pButton
+    label="Alterar senha"
+    class="p-button-outlined"
+    [ngStyle]="{ color: '#12619e', borderColor: '#12619e' }"
+  ></button>
+
+  <button
+    pButton
+    label="Editar usuário"
+    class="p-button"
+    [ngStyle]="{ backgroundColor: '#12619e', borderColor: '#12619e' }"
+  ></button>
+    </div>
+
+    <!-- Cabeçalho -->
+    <div class="text-section">
+      <h2>Perfil</h2>
+      <p>Perfil do usuário</p>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Informações -->
+    <div class="text-section">
+      <h3>Informações do usuário</h3>
+    </div>
+<br>
+    <div class="info-grid">
+      <div class="info-label">Nome completo</div>
+      <div class="info-value">{{ user.nome }}</div>
+
+      <div class="info-label">Nome de Usuário</div>
+      <div class="info-value">{{ user.usuario }}</div>
+
+      <div class="info-label">E-mail</div>
+      <div class="info-value">{{ user.email }}</div>
+
+      <div class="info-label">Departamento</div>
+      <div class="info-value">{{ user.departamento }}</div>
+
+      <div class="info-label">Data de Cadastro</div>
+      <div class="info-value">{{ user.cadastro | date: 'longDate' }}</div>
+
+      <div class="info-label">Status</div>
+      <div class="info-value">{{ user.status }}</div>
+
+      <div class="info-label">Arquivos Gerenciados</div>
+      <div class="info-value">{{ user.totalArquivos }}</div>
+
+      <div class="info-label">Permissões</div>
+      <div class="info-value">{{ user.permissoes.join(', ') }}</div>
+    </div>
+  </div>
+</div>

@@ -1,47 +1,86 @@
-<!-- Botão para adicionar -->
-<p-button label="Adicionar Documento" icon="pi pi-plus" (onClick)="showDialog()"></p-button>
+<div class="p-4 mt-6 md:mx-6 md:p-12">
+  <h3>Arquivos do Sistema</h3>
+  <p>Lista de arquivos disponíveis para visualização e gerenciamento</p>
 
-<!-- Campo de busca -->
-<div style="margin: 20px 0;">
-  <p-inputText [(ngModel)]="searchQuery" placeholder="Pesquisar por título ou categoria"></p-inputText>
+  <button 
+  pButton 
+  label="Adicionar Arquivo" 
+  icon="pi pi-plus" 
+  class="p-button-text" 
+  [routerLink]="['/adicionar']">
+</button>
+  <hr />
+  <p-toast></p-toast>
+
+  <p-table #dt [value]="arquivos" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'" dataKey="id">
+    
+    <!-- 🔍 Filtro Global -->
+    <ng-template pTemplate="caption">
+      <div class="table-header flex justify-between items-center">
+        Lista de Arquivos
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="applyFilterGlobal($event)"
+            placeholder="Buscar..."
+            class="rounded-md border border-gray-300 py-1.5 shadow-sm focus:border-red-300"
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- Cabeçalho -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+        <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo"></p-sortIcon></th>
+        <th pSortableColumn="tamanho">Tamanho (KB) <p-sortIcon field="tamanho"></p-sortIcon></th>
+        <th pSortableColumn="dataCriacao">Data de Criação <p-sortIcon field="dataCriacao"></p-sortIcon></th>
+        <th></th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+
+    <!-- Corpo -->
+    <ng-template pTemplate="body" let-arquivo>
+      <tr>
+        <td>{{ arquivo.nome }}</td>
+        <td>{{ arquivo.tipo }}</td>
+        <td>{{ arquivo.tamanho }}</td>
+        <td>{{ arquivo.dataCriacao | date: 'shortDate' }}</td>
+        <td>
+          <td>
+            <div class="flex items-center gap-2">
+              <button
+                pButton
+                icon="pi pi-eye"
+                class="p-button-text"
+                (click)="visualizarArquivo(arquivo)"
+              ></button>
+          
+              <button
+                pButton
+                icon="pi pi-pencil"
+                class="p-button-text"
+              ></button>
+          
+              <button
+                pButton
+                icon="pi pi-trash"
+                class="p-button-text p-button-danger"
+                (click)="excluirArquivo(arquivo)"
+              ></button>
+            </div>
+          </td>
+      </tr>
+    </ng-template>
+
+    <!-- Paginação -->
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div>Página {{ state.page + 1 }} de {{ state.pageCount }}</div>
+    </ng-template>
+
+  </p-table>
 </div>
-
-<!-- Tabela de documentos -->
-<p-table [value]="filteredDocuments" [tableStyle]="{'min-width': '50rem'}">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>ID</th>
-      <th>Título</th>
-      <th>Categoria</th>
-      <th>Data</th>
-      <th>Ações</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-document>
-    <tr>
-      <td>{{document.id}}</td>
-      <td>{{document.title}}</td>
-      <td>{{document.category}}</td>
-      <td>{{document.date}}</td>
-      <td>
-        <p-button icon="pi pi-pencil" styleClass="p-button-warning" (onClick)="showDialog(document)" ></p-button>
-        <p-button icon="pi pi-trash" styleClass="p-button-danger" (onClick)="deleteDocument(document)"></p-button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
-
-<!-- Diálogo para adicionar/editar documento -->
-<p-dialog [header]="isEditMode ? 'Editar Documento' : 'Novo Documento'" [(visible)]="displayDialog" [modal]="true" [style]="{width: '30vw'}">
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <p-inputText [(ngModel)]="selectedDocument.title" placeholder="Título do documento"></p-inputText>
-    <p-inputText [(ngModel)]="selectedDocument.category" placeholder="Categoria"></p-inputText>
-  </div>
-  <ng-template pTemplate="footer">
-    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayDialog=false" styleClass="p-button-secondary"></p-button>
-    <p-button label="Salvar" icon="pi pi-check" (onClick)="saveDocument()"></p-button>
-  </ng-template>
-</p-dialog>
-
-<!-- Componente de confirmação -->
-<p-confirmDialog></p-confirmDialog>

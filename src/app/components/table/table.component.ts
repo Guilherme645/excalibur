@@ -1,69 +1,45 @@
-import { Component, Input } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-
-interface Document {
-  id: number;
-  title: string;
-  category: string;
-  date: string;
-}
+import { Component, ViewChild } from '@angular/core';
+import { Table } from 'primeng/table';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.css'],
+  providers: [MessageService]
 })
 export class TableComponent {
-  @Input() documents: Document[] = [];
-  
-  selectedDocument: Document = { id: 0, title: '', category: '', date: '' };
-  displayDialog: boolean = false;
-  isEditMode: boolean = false;
-  searchQuery: string = '';
+  @ViewChild('dt') tabela!: Table;
 
-  constructor(private confirmationService: ConfirmationService) {}
+  arquivos = [
+    { id: 1, nome: 'Relatorio_Final.pdf', tipo: 'PDF', tamanho: 512, dataCriacao: new Date(2023, 10, 1) },
+    { id: 2, nome: 'Imagem01.png', tipo: 'Imagem', tamanho: 1240, dataCriacao: new Date(2023, 11, 15) },
+    { id: 3, nome: 'Dados.xlsx', tipo: 'Planilha', tamanho: 1024, dataCriacao: new Date(2024, 1, 5) },
+    { id: 4, nome: 'Contrato.docx', tipo: 'Documento', tamanho: 890, dataCriacao: new Date(2023, 6, 20) },
+    { id: 5, nome: 'Backup.zip', tipo: 'Compactado', tamanho: 20480, dataCriacao: new Date(2022, 3, 10) }
+  ];
 
-  // Mostrar diálogo para adicionar ou editar
-  showDialog(document?: Document) {
-    if (document) {
-      this.selectedDocument = { ...document };
-      this.isEditMode = true;
-    } else {
-      this.selectedDocument = { id: 0, title: '', category: '', date: '' };
-      this.isEditMode = false;
-    }
-    this.displayDialog = true;
+  constructor(private messageService: MessageService) {}
+
+  applyFilterGlobal(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.tabela.filterGlobal(filterValue, 'contains');
   }
 
-  // Salvar documento (adicionar ou editar)
-  saveDocument() {
-    if (this.isEditMode) {
-      const index = this.documents.findIndex(doc => doc.id === this.selectedDocument.id);
-      this.documents[index] = { ...this.selectedDocument };
-    } else {
-      this.selectedDocument.id = this.documents.length + 1;
-      this.selectedDocument.date = new Date().toLocaleDateString();
-      this.documents.push({ ...this.selectedDocument });
-    }
-    this.displayDialog = false;
-    this.selectedDocument = { id: 0, title: '', category: '', date: '' };
-  }
-
-  // Deletar documento com confirmação
-  deleteDocument(document: Document) {
-    this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir "${document.title}"?`,
-      accept: () => {
-        this.documents = this.documents.filter(doc => doc.id !== document.id);
-      }
+  visualizarArquivo(arquivo: any) {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Visualizar Arquivo',
+      detail: `Visualizando "${arquivo.nome}"`
     });
   }
 
-  // Filtrar documentos
-  get filteredDocuments() {
-    return this.documents.filter(doc =>
-      doc.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-      doc.category.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+  excluirArquivo(arquivo: any) {
+    this.arquivos = this.arquivos.filter(a => a.id !== arquivo.id);
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Arquivo Excluído',
+      detail: `O arquivo "${arquivo.nome}" foi excluído.`
+    });
   }
 }

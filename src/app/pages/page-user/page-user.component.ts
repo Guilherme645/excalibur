@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-page-table',
-  templateUrl: './page-table.component.html',
-  styleUrls: ['./page-table.component.css']
+  selector: 'app-page-user',
+  templateUrl: './page-user.component.html',
+  styleUrls: ['./page-user.component.css']
 })
-export class PageTableComponent  {
-
+export class PageUserComponent {
   isSidebarCollapsed = false; 
 
   constructor() { }
@@ -14,5 +13,4 @@ export class PageTableComponent  {
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
-
 }

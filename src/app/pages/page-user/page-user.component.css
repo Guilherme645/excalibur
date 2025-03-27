@@ -1,0 +1,117 @@
+/* Container principal da página */
+.page-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f6f8;
+  }
+  
+  /* Sidebar fixa */
+  .sidebar {
+    width: 270px;
+    transition: width 0.3s ease-in-out;
+    background-color: #f5f9f6;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Sidebar recolhido */
+  .sidebar.collapsed {
+    width: 70px;
+    padding: 20px 5px;
+    overflow: hidden;
+  }
+  
+  .sidebar.collapsed .nav-text {
+    display: none;
+  }
+  
+  /* Área principal */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 2px 50px rgba(0, 0, 0, 0.301);
+    margin: 20px;
+    overflow-y: auto;
+    width: 1200px;
+    height: 800px;
+    margin-left: 300px;
+  }
+  
+  /* Relatório */
+  .app-relatorio {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h3 {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  p {
+    color: #555;
+  }
+  
+  .dashboard-container {
+    flex-grow: 1;
+    padding: 50px;
+    max-width: calc(100% - 320px);
+    max-height: calc(100% - 270px);
+    box-sizing: border-box;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 50px rgba(0, 0, 0, 0.301);
+    transition: all 0.3s ease-in-out;
+    margin-left: 300px;
+    margin-right: -10px;
+    height: 100%;
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+  
+  .app-container.sidebar-collapsed .dashboard-container {
+    margin-left: 70px;
+    max-width: calc(100% - 70px);
+  }
+  
+  .menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 250px;
+    background-color: #12619e; /* Substituímos #ff6b6b pelo azul #12619e */
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    color: white;
+    z-index: 1000;
+    margin-left: 50px;
+    margin-top: -10px;
+  }
+  
+  .app-container.sidebar-collapsed .menu-toggle {
+    left: 30px;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 1024px) {
+    .page-container {
+        flex-direction: column;
+    }
+  
+    .app-sidebar {
+        width: 100%;
+        box-shadow: none;
+    }
+  
+    .main-content {
+        margin: 0;
+    }
+  }

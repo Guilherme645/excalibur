@@ -1,0 +1,158 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #202124;
+}
+
+/* Container principal dos resultados */
+.results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.result-title a {
+  text-decoration: none;
+  color: #0000ee; /* Cor padrão do link */
+}
+
+.result-title a:hover {
+  text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+.search-bar {
+    display: flex;
+    margin: 20px 0;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 25px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .search-bar input::placeholder {
+    color: #9ca3af;
+  }
+  
+  .search-bar input:focus {
+    border-color: #12619e;
+  }
+  
+
+.search-bar{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/* Botão de pesquisa */
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #4285f4;
+    color: white;
+    border-radius: 4px;
+}
+
+/* Resultados de busca */
+.results {
+    flex: 2;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.result-title {
+    color: #1a0dab;
+    padding-right: 500px;}
+
+.result-title a {
+    text-decoration: none; /* Remove o sublinhado no link */
+    color: inherit; /* Usa a cor do .result-title */
+}
+
+.result-item {
+    margin-bottom: 20px;
+}
+
+.result-description {
+    color: #555;
+    margin-top: 5px;
+}
+
+
+
+.results h2 {
+    margin-bottom: 2px;
+    color: #1a0dab;
+}
+
+.result-item {
+margin-top: 20px;
+    margin-left: 40px;
+}
+
+/* Título do resultado */
+.result-item h3 a {
+    color: #1a0dab;
+    text-decoration: none;
+}
+
+.result-item h3 a:hover {
+    text-decoration: underline;
+}
+
+/* Descrição do resultado */
+.result-item p {
+    margin: 5px 0;
+}
+
+.result-description{
+    padding-right: 400px;
+}
+
+.result-link{
+    color: #000000;
+}
+
+.favicon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .source-link {
+    color: #1a0dab;
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .source-link:hover {
+    text-decoration: underline;
+  }
+
+
+
+  h3{
+margin-left: 40px;
+margin-top: 20px;
+
+}

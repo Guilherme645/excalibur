@@ -1,0 +1,57 @@
+<div class="resultados-container">
+  <!-- Componente de cabeçalho com filtros -->
+  <app-header></app-header>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="termo"
+      (keyup.enter)="pesquisarNovamente()"
+      placeholder="Pesquise no Informa Search ou digite uma URL"
+    />
+  </div>
+
+  <!-- Lista de notícias -->
+  <div *ngFor="let noticia of noticias" class="result-item">
+    
+    <!-- Título da notícia -->
+    <h2 class="result-title">
+      <a [href]="noticia.link" target="_blank">{{ noticia.title }}</a>
+    </h2>
+
+    <!-- Descrição da notícia -->
+    <p class="result-description">
+      {{ noticia.description | slice: 0:200 }}...
+    </p>
+
+    <!-- Informações adicionais -->
+    <div class="source-info">
+      <img
+        *ngIf="noticia.faviconUrl"
+        [src]="noticia.faviconUrl"
+        alt="Ícone do site"
+        class="favicon"
+      />
+      <a [href]="noticia.link" target="_blank" class="source-link">{{ noticia.link }}</a>
+    </div>
+
+    <!-- Link para a notícia -->
+    <a [href]="noticia.link" class="result-link" target="_blank">Leia mais</a>
+  </div>
+
+  <!-- Exibição caso não haja resultados -->
+  <div *ngIf="!noticias || noticias.length === 0" class="no-results">
+    <p>Nenhum resultado encontrado para "{{ termo }}".</p>
+  </div>
+
+  <!-- Paginação -->
+  <div class="pagination-container">
+    <p-paginator
+      [rows]="pageSize"
+      [totalRecords]="totalItems"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      (onPageChange)="onPageChange($event)"
+      styleClass="custom-paginator"
+    ></p-paginator>
+  </div>
+</div>

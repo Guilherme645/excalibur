@@ -1,0 +1,54 @@
+<div class="header-filter">
+
+
+
+  <div class="filter-actions">
+
+    <!-- Ordenação alfabética -->
+    <p-dropdown
+      [options]="sortAZOptions"
+      [(ngModel)]="selectedAZ"
+      (onChange)="onAZSortChange($event)"
+      placeholder="Ordenar A-Z"
+      optionLabel="label"
+      optionValue="value"
+    ></p-dropdown>
+
+    <!-- Período / Data -->
+    <p-calendar 
+      [(ngModel)]="selectedDate" 
+      [showIcon]="true" 
+      placeholder="Filtrar por data">
+    </p-calendar>
+
+    <!-- Tipo de arquivo -->
+    <p-multiSelect
+      [options]="fileTypes"
+      [(ngModel)]="selectedTypes"
+      defaultLabel="Tipo de arquivo"
+      optionLabel="label"
+      optionValue="value"
+      (onChange)="onTypeChange($event)"
+    ></p-multiSelect>
+
+    <!-- Tamanho do arquivo -->
+    <p-dropdown
+      [options]="fileSizeOptions"
+      [(ngModel)]="selectedSize"
+      placeholder="Tamanho"
+      optionLabel="label"
+      optionValue="value"
+      (onChange)="onSizeChange($event)"
+    ></p-dropdown>
+
+    <!-- Botão de filtros avançados -->
+    <button
+      pButton
+      type="button"
+      icon="pi pi-sliders-h"
+      class="p-button-icon-only p-button-secondary"
+      (click)="openAdvancedFilters()"
+    ></button>
+
+  </div>
+</div>

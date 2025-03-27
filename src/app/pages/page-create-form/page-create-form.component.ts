@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class PageCreateFormComponent {
   documentForm: FormGroup;
+  isSidebarCollapsed = false;
 
   documentTypes = [
     { label: 'Ofício', value: 'Ofício' },
@@ -104,5 +105,8 @@ export class PageCreateFormComponent {
 
   cancel() {
     this.router.navigate(['/documents']);
+  }
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 }

@@ -1,16 +1,53 @@
-<p-sidebar [(visible)]="visible" position="left" [style]="{width: '250px'}">
-  <h2>Sistema de Arquivos</h2>
-  <ul style="list-style: none; padding: 0;">
-    <li *ngFor="let module of modules" 
-    (click)="visible = false"
-    style="padding: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-  <a [routerLink]="module.route" routerLinkActive="active" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-    <i [class]="module.icon"></i>
-    <span>{{module.label}}</span>
-  </a>
-</li>
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+    <header>
+      <div class="logo-container">
+        <h1 class="logo-text">All Cortex</h1>
+      </div>
+  </header>
+ <!-- Menu Section -->
+ <div class="menu-wrapper">
+  <ul class="menu-links">
+    <li class="nav-link" *ngFor="let item of menuItems">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        *ngIf="isCollapsed; else fullText"
+        pTooltip="{{ item.label }}"
+        tooltipPosition="right"
+      >
+        <i [class]="item.icon"></i>
+      </a>
+      <ng-template #fullText>
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i [class]="item.icon"></i>
+          <span class="nav-text">{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </li>
   </ul>
-</p-sidebar>
+</div>
+  <!-- Área do usuário -->
+  <!-- User Info Section com p-avatar -->
+  <div class="user-info" *ngIf="!isCollapsed">
+    <p-avatar
+      label="AC" 
+      size="large"
+      shape="circle" 
+      styleClass="user-avatar" 
+    ></p-avatar>
+    <div class="user-details">
+      <div class="user-name">Antônio Costa</div>
+      <div class="user-role">Arquivista</div>
+    </div>
+  </div>
 
-<!-- Botão para abrir/fechar o sidebar -->
-<p-button icon="pi pi-bars" (onClick)="visible = !visible" [style]="{}"></p-button>
+  <!-- Toggle Button -->
+  <button class="toggle-btn" (click)="toggleSidebar()">
+    <i class="fa fa-bars"></i>
+  </button>
+</nav>

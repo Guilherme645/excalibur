@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,19 +6,32 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  visible: boolean = true; // Controla a visibilidade do sidebar
+  @Input() isCollapsed = false; 
+  @Output() sidebarToggle = new EventEmitter<boolean>(); 
+  ngOnInit(): void {
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    this.isCollapsed = savedState === 'true'; 
+  }
 
-  // Lista de módulos (itens do menu)
-  modules = [
-    { label: 'Documentos', icon: 'pi pi-folder', route: '/adicionar' },
-    { label: 'Categorias', icon: 'pi pi-tags', route: '/table' },
-    { label: 'Relatórios', icon: 'pi pi-chart-bar', route: '/reports' },
-    { label: 'Configurações', icon: 'pi pi-cog', route: '/settings' }
+  toggleSidebar(): void {
+    this.isCollapsed = !this.isCollapsed;
+    localStorage.setItem('sidebarCollapsed', String(this.isCollapsed));
+  }
+  menuItems = [
+    { label: 'Arquivos', icon: 'pi pi-home', route: '/arquivos' },
+
+    { label: 'Tabela', icon: 'pi pi-book', route: '/dashboard' },
+      
+    //  { label: 'Serviços', icon: 'pi pi-cog', route: '/adicionar' },
+
+     { label: 'Conta', icon: 'pi pi-user', route: '/perfil' },
+
+    
+  
+
+    { label: 'Sair', icon: 'pi pi-sign-out', route: '/login' }
+
   ];
 
-  // Função para lidar com cliques nos itens (pode ser expandida)
-  selectModule(module: any) {
-    console.log(`Módulo selecionado: ${module.label}`);
-    // Aqui você pode adicionar lógica de navegação ou eventos
-  }
+  
 }

@@ -1,9 +1,20 @@
-<app-sidebar></app-sidebar>
+<div class="app-container" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <!-- Botão de toggle -->
+  <button class="menu-toggle" (click)="toggleSidebar()">
+    <i [class]="isSidebarCollapsed ? 'pi pi-bars' : 'pi pi-angle-double-left'"></i>
+  </button>
 
-<h2>Formulário de Arquivamento de Documento</h2>
+  <!-- Sidebar -->
+  <app-sidebar [isCollapsed]="isSidebarCollapsed"></app-sidebar>
 
-<div style="max-width: 800px; margin: 20px auto;">
-  <form [formGroup]="documentForm" (ngSubmit)="saveDocument()">
+  <!-- Conteúdo principal -->
+  <div class="dashboard-container">
+    <!-- Título -->
+    <h2>Formulário de Arquivamento de Documento</h2>
+
+
+    <div class="content-wrapper">
+      <form [formGroup]="documentForm" (ngSubmit)="saveDocument()">
     <p-tabView>
       <!-- 1. Identificação do Documento -->
       <p-tabPanel header="1. Identificação do Documento">
@@ -180,4 +191,6 @@
       <p-button label="Salvar" icon="pi pi-check" type="submit" [disabled]="documentForm.invalid"></p-button>
     </div>
   </form>
+</div>
+</div>
 </div>
