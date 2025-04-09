@@ -1,196 +1,156 @@
 <div class="app-container" [class.sidebar-collapsed]="isSidebarCollapsed">
-  <!-- Botão de toggle -->
   <button class="menu-toggle" (click)="toggleSidebar()">
     <i [class]="isSidebarCollapsed ? 'pi pi-bars' : 'pi pi-angle-double-left'"></i>
   </button>
 
-  <!-- Sidebar -->
   <app-sidebar [isCollapsed]="isSidebarCollapsed"></app-sidebar>
 
-  <!-- Conteúdo principal -->
   <div class="dashboard-container">
-    <!-- Título -->
     <h2>Formulário de Arquivamento de Documento</h2>
-
 
     <div class="content-wrapper">
       <form [formGroup]="documentForm" (ngSubmit)="saveDocument()">
-    <p-tabView>
-      <!-- 1. Identificação do Documento -->
-      <p-tabPanel header="1. Identificação do Documento">
-        <div class="form-section">
-          <div>
-            <label for="title">Título do Documento <span class="required">*</span></label>
-            <input type="text" id="title" formControlName="title" placeholder="Digite o título" style="width: 100%;">
-          </div>
-          <div>
-            <label for="type">Tipo de Documento</label>
-            <p-dropdown id="type" formControlName="type" [options]="documentTypes" optionLabel="label" optionValue="value" placeholder="Selecione o tipo" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-          <div>
-            <label for="protocolNumber">Número de Identificação / Protocolo</label>
-            <input type="text" id="protocolNumber" formControlName="protocolNumber" placeholder="Ex: 123/2025" style="width: 100%;">
-          </div>
-          <div>
-            <label for="creationDate">Data de Criação <span class="required">*</span></label>
-            <p-calendar id="creationDate" formControlName="creationDate" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{'width': '100%'}"></p-calendar>
-          </div>
-          <div>
-            <label for="receiptDate">Data de Recebimento</label>
-            <p-calendar id="receiptDate" formControlName="receiptDate" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{'width': '100%'}"></p-calendar>
-          </div>
-          <div>
-            <label for="originalDate">Data do Documento Original</label>
-            <p-calendar id="originalDate" formControlName="originalDate" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{'width': '100%'}"></p-calendar>
-          </div>
-        </div>
-      </p-tabPanel>
+        <p-tabView>
+          <!-- Aba 1: Upload e Informações do Arquivo -->
+          <p-tabPanel header="Upload e Informações do Arquivo">
+            <div class="form-section">
+              <div>
+                <label for="fileUpload">Upload de Arquivo</label>
+                <p-fileUpload id="fileUpload" 
+                             name="fileUpload" 
+                             (onSelect)="onFileSelect($event)" 
+                             [auto]="true" 
+                             [customUpload]="true" 
+                             [showUploadButton]="false" 
+                             [chooseLabel]="'Selecionar arquivo'"
+                             [showCancelButton]="true" 
+                             [multiple]="false" 
+                             [style]="{'width': '100%'}">
+                </p-fileUpload>
+              </div>
+              <br>
+              <div>
+                <label for="fileFormat">Formato do Arquivo</label>
+                <p-dropdown id="fileFormat" 
+                           formControlName="fileFormat" 
+                           [options]="fileFormats" 
+                           optionLabel="label" 
+                           optionValue="value" 
+                           placeholder="Selecione o formato" 
+                           [style]="{'width': '100%'}"></p-dropdown>
+              </div>
+              <br>
+              <div>
+                <label for="fileSize">Tamanho do Arquivo</label>
+                <input id="fileSize"
+                       name="fileSize"
+                       type="text"
+                       autocomplete="off"
+                       formControlName="fileSize"
+                       pInputText
+                       class="input-field"
+                       placeholder="Ex: 2.5 MB"
+                       style="width: 100%;"
+                       readonly>
+              </div>
+            </div>
+          </p-tabPanel>
 
-      <!-- 2. Produção e Procedência -->
-      <p-tabPanel header="2. Produção e Procedência">
-        <div class="form-section">
-          <div>
-            <label for="producerName">Nome do Produtor/Emitente</label>
-            <input type="text" id="producerName" formControlName="producerName" placeholder="Ex: João Silva" style="width: 100%;">
-          </div>
-          <div>
-            <label for="department">Setor/Departamento de Origem</label>
-            <input type="text" id="department" formControlName="department" placeholder="Ex: Financeiro" style="width: 100%;">
-          </div>
-          <div>
-            <label for="responsible">Responsável pela Produção</label>
-            <input type="text" id="responsible" formControlName="responsible" placeholder="Ex: Maria Oliveira" style="width: 100%;">
-          </div>
-        </div>
-      </p-tabPanel>
+          <!-- Aba 2: Identificação do Documento -->
+          <p-tabPanel header="Identificação do Documento">
+            <div class="form-section">
+              <div>
+                <label for="documentType">Tipo de Documento <span class="required">*</span></label>
+                <p-dropdown id="documentType" 
+                           formControlName="documentType" 
+                           [options]="documentTypes" 
+                           optionLabel="label" 
+                           optionValue="value" 
+                           placeholder="Selecione o tipo" 
+                           [style]="{'width': '100%'}"></p-dropdown>
+              </div>
+              <br>
+              <div>
+                <label for="collectionType">Tipo de Coleção <span class="required">*</span></label>
+                <p-dropdown id="collectionType" 
+                           formControlName="collectionType" 
+                           [options]="collectionTypes" 
+                           optionLabel="label" 
+                           optionValue="value" 
+                           placeholder="Selecione a coleção" 
+                           [style]="{'width': '100%'}"></p-dropdown>
+              </div>
+              <br>
+              <div>
+                <label for="documentNumber">Número do Documento</label>
+                <input id="documentNumber"
+                       name="documentNumber"
+                       type="text"
+                       autocomplete="off"
+                       formControlName="documentNumber"
+                       pInputText
+                       class="input-field"
+                       placeholder="Ex: 123/2025"
+                       style="width: 100%;">
+              </div>
+              <br>
+              <div>
+                <label for="productionDate">Data de Produção <span class="required">*</span></label>
+                <p-calendar id="productionDate" 
+                           formControlName="productionDate" 
+                           dateFormat="dd/mm/yy" 
+                           [showIcon]="true" 
+                           [style]="{'width': '100%'}"></p-calendar>
+              </div>
+              <br>
+              <div>
+                <label for="authorOrigin">Autor/Origem do Documento <span class="required">*</span></label>
+                <input id="authorOrigin"
+                       name="authorOrigin"
+                       type="text"
+                       autocomplete="off"
+                       formControlName="authorOrigin"
+                       pInputText
+                       class="input-field"
+                       placeholder="Ex: João Silva / Financeiro"
+                       style="width: 100%;">
+              </div>
+            </div>
+          </p-tabPanel>
 
-      <!-- 3. Classificação e Assuntos -->
-      <p-tabPanel header="3. Classificação e Assuntos">
-        <div class="form-section">
-          <div>
-            <label for="mainSubject">Assunto Principal</label>
-            <input type="text" id="mainSubject" formControlName="mainSubject" placeholder="Ex: Contratação" style="width: 100%;">
-          </div>
-          <div>
-            <label for="description">Descrição do Conteúdo</label>
-            <textarea pInputTextarea id="description" formControlName="description" placeholder="Resumo do documento" rows="3" [style]="{'width': '100%'}"></textarea>
-          </div>
-          <div>
-            <label for="archivalCode">Classificação Arquivística</label>
-            <input type="text" id="archivalCode" formControlName="archivalCode" placeholder="Ex: 01.02.03" style="width: 100%;">
-          </div>
-          <div>
-            <label for="category">Categoria do Documento</label>
-            <p-dropdown id="category" formControlName="category" [options]="categories" optionLabel="label" optionValue="value" placeholder="Selecione a categoria" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-        </div>
-      </p-tabPanel>
+          <!-- Aba 3: Detalhes Adicionais -->
+          <p-tabPanel header="Detalhes Adicionais">
+            <div class="form-section">
+              <div>
+                <label for="keywords">Palavras-chave</label>
+                <p-multiSelect id="keywords" 
+                              formControlName="keywords" 
+                              [options]="availableKeywords" 
+                              optionLabel="label" 
+                              optionValue="value" 
+                              placeholder="Selecione palavras-chave" 
+                              [style]="{'width': '100%'}"></p-multiSelect>
+              </div>
+              <br>
+              <div>
+                <label for="description">Descrição/Resumo</label>
+                <p-editor [(ngModel)]="text" [style]="{ height: '320px' }" />
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
 
-      <!-- 4. Acesso e Sigilo -->
-      <p-tabPanel header="4. Acesso e Sigilo">
-        <div class="form-section">
-          <div>
-            <label for="accessLevel">Nível de Acesso</label>
-            <p-dropdown id="accessLevel" formControlName="accessLevel" [options]="accessLevels" optionLabel="label" optionValue="value" placeholder="Selecione o nível" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-          <div>
-            <label for="restrictionPeriod">Prazo de Restrição de Acesso</label>
-            <input type="text" id="restrictionPeriod" formControlName="restrictionPeriod" placeholder="Ex: 5 anos" style="width: 100%;">
-          </div>
-          <div>
-            <label for="legalBasis">Base Legal</label>
-            <input type="text" id="legalBasis" formControlName="legalBasis" placeholder="Ex: LGPD" style="width: 100%;">
-          </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <p-button label="Cancelar" 
+                   icon="pi pi-times" 
+                   (onClick)="cancel()" 
+                   styleClass="p-button-secondary"></p-button>
+          <p-button label="Salvar" 
+                   icon="pi pi-check" 
+                   type="submit" 
+                   [disabled]="documentForm.invalid"></p-button>
         </div>
-      </p-tabPanel>
-
-      <!-- 5. Suporte e Formato -->
-      <p-tabPanel header="5. Suporte e Formato">
-        <div class="form-section">
-          <div>
-            <label for="physicalSupport">Suporte Físico</label>
-            <p-dropdown id="physicalSupport" formControlName="physicalSupport" [options]="physicalSupports" optionLabel="label" optionValue="value" placeholder="Selecione o suporte" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-          <div>
-            <label for="digitalFormat">Formato Digital</label>
-            <p-dropdown id="digitalFormat" formControlName="digitalFormat" [options]="digitalFormats" optionLabel="label" optionValue="value" placeholder="Selecione o formato" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-          <div>
-            <label for="language">Idioma do Documento</label>
-            <input type="text" id="language" formControlName="language" placeholder="Ex: Português" style="width: 100%;">
-          </div>
-        </div>
-      </p-tabPanel>
-
-      <!-- 6. Localização e Armazenamento -->
-      <p-tabPanel header="6. Localização e Armazenamento">
-        <div class="form-section">
-          <div>
-            <label for="storageLocation">Local de Guarda</label>
-            <input type="text" id="storageLocation" formControlName="storageLocation" placeholder="Ex: Armário 2, Gaveta 3" style="width: 100%;">
-          </div>
-          <div>
-            <label for="barcode">Código de Barras ou QR Code</label>
-            <input type="text" id="barcode" formControlName="barcode" placeholder="Ex: 123456789" style="width: 100%;">
-          </div>
-          <div>
-            <label for="boxNumber">Nº de Caixa / Pasta / Volume</label>
-            <input type="text" id="boxNumber" formControlName="boxNumber" placeholder="Ex: Caixa 15" style="width: 100%;">
-          </div>
-          <div>
-            <label for="conservationCondition">Condições de Conservação</label>
-            <p-dropdown id="conservationCondition" formControlName="conservationCondition" [options]="conservationConditions" optionLabel="label" optionValue="value" placeholder="Selecione a condição" [style]="{'width': '100%'}"></p-dropdown>
-          </div>
-        </div>
-      </p-tabPanel>
-
-      <!-- 7. Anexos e Observações -->
-      <p-tabPanel header="7. Anexos e Observações">
-        <div class="form-section">
-          <div>
-            <label for="digitalFile">Anexar Arquivo Digital</label>
-            <input type="file" id="digitalFile" (change)="onFileChange($event)" style="width: 100%;">
-          </div>
-          <div>
-            <label for="observations">Observações Gerais</label>
-            <textarea pInputTextarea id="observations" formControlName="observations" placeholder="Notas adicionais" rows="3" [style]="{'width': '100%'}"></textarea>
-          </div>
-          <div>
-            <label for="digitizedBy">Digitalizado por</label>
-            <input type="text" id="digitizedBy" formControlName="digitizedBy" placeholder="Ex: Ana Costa" style="width: 100%;">
-          </div>
-          <div>
-            <label for="digitizationDate">Data de Digitalização</label>
-            <p-calendar id="digitizationDate" formControlName="digitizationDate" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{'width': '100%'}"></p-calendar>
-          </div>
-        </div>
-      </p-tabPanel>
-
-      <!-- 8. Registro -->
-      <p-tabPanel header="8. Registro">
-        <div class="form-section">
-          <div>
-            <label for="registeredBy">Responsável pelo Registro</label>
-            <input type="text" id="registeredBy" formControlName="registeredBy" placeholder="Ex: João Silva" style="width: 100%;">
-          </div>
-          <div>
-            <label for="registrationDate">Data de Registro</label>
-            <p-calendar id="registrationDate" formControlName="registrationDate" dateFormat="dd/mm/yy" [showIcon]="true" [style]="{'width': '100%'}"></p-calendar>
-          </div>
-          <div>
-            <label for="digitalSignature">Assinatura Digital ou Nome do Usuário</label>
-            <input type="text" id="digitalSignature" formControlName="digitalSignature" placeholder="Ex: JSilva" style="width: 100%;">
-          </div>
-        </div>
-      </p-tabPanel>
-    </p-tabView>
-
-    <!-- Botões -->
-    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-      <p-button label="Cancelar" icon="pi pi-times" (onClick)="cancel()" styleClass="p-button-secondary"></p-button>
-      <p-button label="Salvar" icon="pi pi-check" type="submit" [disabled]="documentForm.invalid"></p-button>
+      </form>
     </div>
-  </form>
-</div>
-</div>
+  </div>
 </div>

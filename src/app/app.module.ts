@@ -38,6 +38,8 @@ import { BadgeModule } from 'primeng/badge';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
+import { EditorModule } from 'primeng/editor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +81,8 @@ import { TagModule } from 'primeng/tag';
     BadgeModule,
     CardModule,
     DividerModule,
-    TagModule
+    TagModule,
+    EditorModule
   ],
   providers: [ConfirmationService,MessageService ],
   bootstrap: [AppComponent]

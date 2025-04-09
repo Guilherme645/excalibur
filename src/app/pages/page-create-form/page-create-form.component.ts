@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-page-create-form',
   templateUrl: './page-create-form.component.html',
-  styleUrls: ['./page-create-form.component.css']
+  styleUrls: ['./page-create-form.component.css'],
+  providers: [MessageService]
 })
 export class PageCreateFormComponent {
   documentForm: FormGroup;
   isSidebarCollapsed = false;
+  text: string | undefined;
 
   documentTypes = [
     { label: 'Ofício', value: 'Ofício' },
@@ -19,84 +22,69 @@ export class PageCreateFormComponent {
     { label: 'Outros', value: 'Outros' }
   ];
 
-  categories = [
-    { label: 'Corrente', value: 'Corrente' },
-    { label: 'Intermediário', value: 'Intermediário' },
-    { label: 'Permanente', value: 'Permanente' }
-  ];
-
-  accessLevels = [
-    { label: 'Público', value: 'Público' },
-    { label: 'Restrito', value: 'Restrito' },
-    { label: 'Confidencial', value: 'Confidencial' },
-    { label: 'Sigiloso', value: 'Sigiloso' }
-  ];
-
-  physicalSupports = [
-    { label: 'Papel', value: 'Papel' },
-    { label: 'CD', value: 'CD' },
-    { label: 'Fita', value: 'Fita' },
+  collectionTypes = [
+    { label: 'Administrativa', value: 'Administrativa' },
+    { label: 'Histórica', value: 'Histórica' },
+    { label: 'Técnica', value: 'Técnica' },
     { label: 'Outros', value: 'Outros' }
   ];
 
-  digitalFormats = [
+  fileFormats = [
     { label: 'PDF', value: 'PDF' },
     { label: 'DOCX', value: 'DOCX' },
     { label: 'JPG', value: 'JPG' },
+    { label: 'PNG', value: 'PNG' },
     { label: 'Outros', value: 'Outros' }
   ];
 
-  conservationConditions = [
-    { label: 'Bom', value: 'Bom' },
-    { label: 'Danificado', value: 'Danificado' },
-    { label: 'Digitalizado', value: 'Digitalizado' }
+  availableKeywords = [
+    { label: 'Urgente', value: 'Urgente' },
+    { label: 'Confidencial', value: 'Confidencial' },
+    { label: 'Financeiro', value: 'Financeiro' },
+    { label: 'Legal', value: 'Legal' },
+    { label: 'Administrativo', value: 'Administrativo' }
   ];
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private messageService: MessageService
+  ) {
     this.documentForm = this.fb.group({
-      title: ['', Validators.required],
-      type: [''],
-      protocolNumber: [''],
-      creationDate: [new Date(), Validators.required],
-      receiptDate: [''],
-      originalDate: [''],
-      producerName: [''],
-      department: [''],
-      responsible: [''],
-      mainSubject: [''],
-      description: [''],
-      archivalCode: [''],
-      category: [''],
-      accessLevel: [''],
-      restrictionPeriod: [''],
-      legalBasis: [''],
-      physicalSupport: [''],
-      digitalFormat: [''],
-      language: [''],
-      storageLocation: [''],
-      barcode: [''],
-      boxNumber: [''],
-      conservationCondition: [''],
-      digitalFile: [''],
-      observations: [''],
-      digitizedBy: [''],
-      digitizationDate: [''],
-      registeredBy: [''],
-      registrationDate: [new Date()],
-      digitalSignature: ['']
+      documentType: ['', Validators.required],
+      collectionType: ['', Validators.required],
+      documentNumber: [''],
+      productionDate: [new Date(), Validators.required],
+      authorOrigin: ['', Validators.required],
+      fileFormat: [''],
+      fileSize: [''],
+      fileUpload: [null], // Campo para armazenar o arquivo
+      keywords: [[]],
+      description: ['']
     });
   }
 
-  onFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.documentForm.patchValue({ digitalFile: input.files[0].name });
+  onFileSelect(event: any) {
+    const file = event.files[0];
+    if (file) {
+      this.documentForm.patchValue({ fileUpload: file });
+      this.documentForm.patchValue({ fileSize: (file.size / 1024 / 1024).toFixed(2) + ' MB' });
+      this.documentForm.patchValue({ fileFormat: file.name.split('.').pop().toUpperCase() }); // Atualiza o formato com base na extensão do arquivo
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Arquivo Selecionado',
+        detail: `Arquivo "${file.name}" selecionado com sucesso.`
+      });
     }
   }
 
   saveDocument() {
     if (this.documentForm.invalid) {
-      alert('Por favor, preencha todos os campos obrigatórios!');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Por favor, preencha todos os campos obrigatórios!'
+      });
       return;
     }
     console.log('Documento salvo:', this.documentForm.value);
@@ -106,6 +94,7 @@ export class PageCreateFormComponent {
   cancel() {
     this.router.navigate(['/documents']);
   }
+
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }

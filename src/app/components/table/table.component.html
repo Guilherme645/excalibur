@@ -3,12 +3,12 @@
   <p>Lista de arquivos disponíveis para visualização e gerenciamento</p>
 
   <button 
-  pButton 
-  label="Adicionar Arquivo" 
-  icon="pi pi-plus" 
-  class="p-button-text" 
-  [routerLink]="['/adicionar']">
-</button>
+    pButton 
+    label="Adicionar Arquivo" 
+    icon="pi pi-plus" 
+    class="p-button-text" 
+    [routerLink]="['/adicionar']">
+  </button>
   <hr />
   <p-toast></p-toast>
 
@@ -34,11 +34,11 @@
     <!-- Cabeçalho -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
-        <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo"></p-sortIcon></th>
-        <th pSortableColumn="tamanho">Tamanho (KB) <p-sortIcon field="tamanho"></p-sortIcon></th>
-        <th pSortableColumn="dataCriacao">Data de Criação <p-sortIcon field="dataCriacao"></p-sortIcon></th>
-        <th></th>
+        <th pSortableColumn="tipoDocumento">Documento <p-sortIcon field="tipoDocumento"></p-sortIcon></th>
+        <th pSortableColumn="tipoColecao">Coleção <p-sortIcon field="tipoColecao"></p-sortIcon></th>
+        <th pSortableColumn="autor">Autor <p-sortIcon field="autor"></p-sortIcon></th>
+        <th pSortableColumn="formato">Formato <p-sortIcon field="formato"></p-sortIcon></th>
+        <th pSortableColumn="palavrasChave">Palavras-chave <p-sortIcon field="palavrasChave"></p-sortIcon></th>
         <th>Ações</th>
       </tr>
     </ng-template>
@@ -46,34 +46,34 @@
     <!-- Corpo -->
     <ng-template pTemplate="body" let-arquivo>
       <tr>
-        <td>{{ arquivo.nome }}</td>
-        <td>{{ arquivo.tipo }}</td>
-        <td>{{ arquivo.tamanho }}</td>
-        <td>{{ arquivo.dataCriacao | date: 'shortDate' }}</td>
+        <td>{{ arquivo.tipoDocumento }}</td>
+        <td>{{ arquivo.tipoColecao }}</td>
+        <td>{{ arquivo.autor }}</td>
+        <td>{{ arquivo.formato }}</td>
+        <td>{{ arquivo.palavrasChave }}</td>
         <td>
-          <td>
-            <div class="flex items-center gap-2">
-              <button
-                pButton
-                icon="pi pi-eye"
-                class="p-button-text"
-                (click)="visualizarArquivo(arquivo)"
-              ></button>
-          
-              <button
-                pButton
-                icon="pi pi-pencil"
-                class="p-button-text"
-              ></button>
-          
-              <button
-                pButton
-                icon="pi pi-trash"
-                class="p-button-text p-button-danger"
-                (click)="excluirArquivo(arquivo)"
-              ></button>
-            </div>
-          </td>
+          <div class="flex items-center gap-2">
+            <button
+              pButton
+              icon="pi pi-eye"
+              class="p-button-text"
+              (click)="visualizarArquivo(arquivo)"
+            ></button>
+        
+            <button
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-text"
+            ></button>
+        
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-text p-button-danger"
+              (click)="excluirArquivo(arquivo)"
+            ></button>
+          </div>
+        </td>
       </tr>
     </ng-template>
 
