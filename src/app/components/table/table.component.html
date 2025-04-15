@@ -12,8 +12,17 @@
   <hr />
   <p-toast></p-toast>
 
-  <p-table #dt [value]="arquivos" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'" dataKey="id">
-    
+  <p-table 
+    #dt 
+    [value]="arquivosFiltrados" 
+    [paginator]="true" 
+    [rows]="pageSize" 
+    [totalRecords]="totalItems" 
+    [rowsPerPageOptions]="[5, 10, 20]" 
+    (onPage)="onPageChange($event)" 
+    [responsiveLayout]="'scroll'" 
+    dataKey="id"
+  >
     <!-- 🔍 Filtro Global -->
     <ng-template pTemplate="caption">
       <div class="table-header flex justify-between items-center">
@@ -36,9 +45,11 @@
       <tr>
         <th pSortableColumn="tipoDocumento">Documento <p-sortIcon field="tipoDocumento"></p-sortIcon></th>
         <th pSortableColumn="tipoColecao">Coleção <p-sortIcon field="tipoColecao"></p-sortIcon></th>
+        <th pSortableColumn="title">Título <p-sortIcon field="title"></p-sortIcon></th>
         <th pSortableColumn="autor">Autor <p-sortIcon field="autor"></p-sortIcon></th>
         <th pSortableColumn="formato">Formato <p-sortIcon field="formato"></p-sortIcon></th>
         <th pSortableColumn="palavrasChave">Palavras-chave <p-sortIcon field="palavrasChave"></p-sortIcon></th>
+        <th pSortableColumn="dataCriacao">Data Criação <p-sortIcon field="dataCriacao"></p-sortIcon></th>
         <th>Ações</th>
       </tr>
     </ng-template>
@@ -48,9 +59,11 @@
       <tr>
         <td>{{ arquivo.tipoDocumento }}</td>
         <td>{{ arquivo.tipoColecao }}</td>
+        <td>{{ arquivo.title || 'Sem título' }}</td>
         <td>{{ arquivo.autor }}</td>
         <td>{{ arquivo.formato }}</td>
-        <td>{{ arquivo.palavrasChave }}</td>
+        <td>{{ arquivo.palavrasChave.join(', ') }}</td>
+        <td>{{ arquivo.dataCriacao | date:'dd/MM/yyyy' }}</td>
         <td>
           <div class="flex items-center gap-2">
             <button
@@ -61,11 +74,12 @@
             ></button>
         
             <button
-              pButton
-              icon="pi pi-pencil"
-              class="p-button-text"
-            ></button>
-        
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-text"
+            [routerLink]="['/editar', arquivo.id]">
+          </button>
+          
             <button
               pButton
               icon="pi pi-trash"
@@ -77,10 +91,33 @@
       </tr>
     </ng-template>
 
+    <!-- Mensagem de "Sem Resultados" -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8">Nenhum arquivo encontrado.</td>
+      </tr>
+    </ng-template>
+
     <!-- Paginação -->
     <ng-template pTemplate="paginatorleft" let-state>
       <div>Página {{ state.page + 1 }} de {{ state.pageCount }}</div>
     </ng-template>
-
   </p-table>
+
+  <!-- Diálogo para exibir detalhes -->
+  <p-dialog 
+    header="Detalhes do Arquivo" 
+    [(visible)]="displayDialog" 
+    [modal]="true" 
+    [style]="{width: '50vw'}"
+  >
+    <h3>{{ selectedArquivo?.tipoDocumento }} - {{ selectedArquivo?.title || 'Sem título' }}</h3>
+    <p><strong>Autor:</strong> {{ selectedArquivo?.autor }}</p>
+    <p><strong>Coleção:</strong> {{ selectedArquivo?.tipoColecao }}</p>
+    <p><strong>Formato:</strong> {{ selectedArquivo?.formato }}</p>
+    <p><strong>Data de Criação:</strong> {{ selectedArquivo?.dataCriacao | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Descrição:</strong></p>
+    <div [innerHTML]="selectedArquivoDescription"></div>
+    <p><strong>Link:</strong> <a [href]="selectedArquivo?.link" target="_blank">{{ selectedArquivo?.link }}</a></p>
+  </p-dialog>
 </div>

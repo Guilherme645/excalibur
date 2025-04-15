@@ -20,12 +20,13 @@
 }
 
 .logo-text {
-  font-size: 22px;
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
   color: #ffffff;
-  font-weight: bold;
-  margin: 0;
   letter-spacing: 1px;
 }
+
+
 
 .sidebar.collapsed {
   width: 70px;
@@ -37,14 +38,31 @@
   align-items: center;
   gap: 10px;
   padding: 10px;
-  margin-bottom: 10px; /* Reduzido para diminuir o espaço abaixo do logo */
+  margin-bottom: 10px;
 }
 
-.logo {
-  width: 100px;
-  height: auto;
-  transition: width 0.3s ease-in-out;
+.logo-image {
+  width: 80px;
+  height: 80px;
+  transition: all 0.3s ease;
 }
+
+.collapsed-logo {
+  width: 82px;
+  height: 82px;
+  margin-left: -25px;
+}
+
+.logo-text {
+  font-size: 22px;
+  color: #ffffff;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 1px;
+  transition: opacity 0.3s ease;
+  margin-left: -20px;
+}
+
 
 .sidebar.collapsed .logo {
   width: 40px;

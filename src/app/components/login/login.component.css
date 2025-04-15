@@ -18,7 +18,7 @@ body, html {
     width: 100%;
     max-width: 400px;
     background-color: #ffffff;
-    border-radius: 8px;
+    border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px 30px;
   }
@@ -34,6 +34,14 @@ body, html {
     color: #333333;
   }
   
+  .logo {
+    text-align: center;
+  }
+  
+  .logo-image {
+    width: 300px; /* Ajuste o tamanho conforme necessário */
+    height: auto;
+  }
   .form-container {
     margin-top: 20px;
   }

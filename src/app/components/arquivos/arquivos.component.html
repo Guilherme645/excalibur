@@ -1,49 +1,37 @@
 <div class="resultados-container">
   <!-- Componente de cabeçalho com filtros -->
   <app-header></app-header>
+  <div *ngFor="let arquivo of arquivosFiltrados.slice(page * pageSize, (page + 1) * pageSize)" class="result-item">
+  
+  <!-- Título do arquivo -->
+  <h2 class="result-title">
+    <a [href]="arquivo.link" target="_blank">
+      {{ arquivo.tipoDocumento }} - {{ arquivo.title }}
+    </a>
+  </h2>
+  
 
-  <div class="search-bar">
-    <input
-      type="text"
-      [(ngModel)]="termo"
-      (keyup.enter)="pesquisarNovamente()"
-      placeholder="Pesquise no Informa Search ou digite uma URL"
+  <!-- Descrição do arquivo -->
+  <p class="result-description">
+   <strong>Arquivo da coleção</strong>  {{ arquivo.tipoColecao }} no formato {{ arquivo.formato }}. <br>
+    <strong>Descrição</strong> {{ arquivo.description }}. <br>
+   <strong>Palavras-chave: </strong> {{ arquivo.palavrasChave.join(', ') }}
+  </p>
+
+  <!-- Informações adicionais -->
+  <div class="source-info">
+    <img
+      *ngIf="arquivo.formato"
+      [src]="'assets/icons/' + arquivo.formato.toLowerCase() + '.png'"
+      alt="Ícone do arquivo"
+      class="favicon"
     />
+    <span class="source-link">
+      Criado em: {{ arquivo.dataCriacao | date:'dd/MM/yyyy' }}
+    </span>
   </div>
 
-  <!-- Lista de notícias -->
-  <div *ngFor="let noticia of noticias" class="result-item">
-    
-    <!-- Título da notícia -->
-    <h2 class="result-title">
-      <a [href]="noticia.link" target="_blank">{{ noticia.title }}</a>
-    </h2>
-
-    <!-- Descrição da notícia -->
-    <p class="result-description">
-      {{ noticia.description | slice: 0:200 }}...
-    </p>
-
-    <!-- Informações adicionais -->
-    <div class="source-info">
-      <img
-        *ngIf="noticia.faviconUrl"
-        [src]="noticia.faviconUrl"
-        alt="Ícone do site"
-        class="favicon"
-      />
-      <a [href]="noticia.link" target="_blank" class="source-link">{{ noticia.link }}</a>
-    </div>
-
-    <!-- Link para a notícia -->
-    <a [href]="noticia.link" class="result-link" target="_blank">Leia mais</a>
-  </div>
-
-  <!-- Exibição caso não haja resultados -->
-  <div *ngIf="!noticias || noticias.length === 0" class="no-results">
-    <p>Nenhum resultado encontrado para "{{ termo }}".</p>
-  </div>
-
+</div>
   <!-- Paginação -->
   <div class="pagination-container">
     <p-paginator
@@ -54,4 +42,3 @@
       styleClass="custom-paginator"
     ></p-paginator>
   </div>
-</div>

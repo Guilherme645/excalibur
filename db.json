@@ -1,0 +1,109 @@
+{
+  "arquivos": [
+    {
+      "id": "1",
+      "tipoDocumento": "Relatório",
+      "tipoColecao": "Administrativa",
+      "autor": "João Silva",
+      "formato": "PDF",
+      "palavrasChave": [
+        "Final",
+        "Relatório"
+      ],
+      "dataCriacao": "2023-11-01T00:00:00Z",
+      "title": "Relatório Mensal - João Silva",
+      "description": "Relatório administrativo mensal com análise de desempenho e metas.",
+      "link": "assets/arquivos/marvel.pdf"
+    },
+    {
+      "id": "2",
+      "tipoDocumento": "Imagem",
+      "tipoColecao": "Visual",
+      "autor": "Maria Oliveira",
+      "formato": "PNG",
+      "palavrasChave": [
+        "Foto",
+        "Projeto"
+      ],
+      "dataCriacao": "2023-12-15T00:00:00Z",
+      "title": "Foto do Projeto Alpha",
+      "description": "Imagem ilustrativa do progresso do Projeto Alpha na fase final.",
+      "link": "assets/arquivos/marvel.pdf"
+    },
+    {
+      "id": "3",
+      "tipoDocumento": "Planilha",
+      "tipoColecao": "Financeira",
+      "autor": "Pedro Santos",
+      "formato": "XLSX",
+      "palavrasChave": [
+        "Dados",
+        "2024"
+      ],
+      "dataCriacao": "2024-02-05T00:00:00Z",
+      "title": "Planilha de Gastos 2024",
+      "description": "Documento financeiro com detalhamento de despesas e projeções.",
+      "link": "assets/arquivos/marvel.pdf"
+    },
+    {
+      "id": "4",
+      "tipoDocumento": "Contrato",
+      "tipoColecao": "Jurídica",
+      "autor": "Ana Costa",
+      "formato": "DOCX",
+      "palavrasChave": [
+        "Contrato",
+        "Assinatura"
+      ],
+      "dataCriacao": "2023-07-20T00:00:00Z",
+      "title": "Contrato de Prestação de Serviços",
+      "description": "Contrato jurídico entre a empresa e o cliente firmado em julho.",
+      "link": "assets/arquiv.pdf"
+    },
+    {
+      "id": "5",
+      "tipoDocumento": "Backup",
+      "tipoColecao": "Técnica",
+      "autor": "Carlos Lima",
+      "formato": "ZIP",
+      "palavrasChave": [
+        "Backup",
+        "Sistema"
+      ],
+      "dataCriacao": "2022-04-10T00:00:00Z",
+      "title": "Backup Completo do Sistema",
+      "description": "Arquivo compactado com todos os dados do sistema até abril de 2022.",
+      "link": "assets/arquiv.pdf"
+    },
+    {
+      "id": "749",
+      "tipoDocumento": "Contrato",
+      "tipoColecao": "Outros",
+      "autor": "gui",
+      "formato": "PDF",
+      "palavrasChave": [
+        "Urgente",
+        "Confidencial",
+        "Financeiro",
+        "Legal",
+        "Administrativo"
+      ],
+      "dataCriacao": "2025-04-15T02:08:50.170Z",
+      "title": "marvel",
+      "description": "marvel é demais",
+      "link": "arquivo_desconhecido.pdf"
+    },
+    {
+      "tipoDocumento": "Relatório",
+      "tipoColecao": "Histórica",
+      "autor": "df",
+      "formato": "PDF",
+      "palavrasChave": [],
+      "dataCriacao": "2025-04-15T02:29:29.414Z",
+      "title": "df",
+      "description": "gdfghdfgdfgdfgdfgdg",
+      "link": "arquivo_desconhecido.pdf",
+      "id": "349b"
+    }
+  ]
+}

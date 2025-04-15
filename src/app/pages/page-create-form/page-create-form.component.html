@@ -6,7 +6,7 @@
   <app-sidebar [isCollapsed]="isSidebarCollapsed"></app-sidebar>
 
   <div class="dashboard-container">
-    <h2>Formulário de Arquivamento de Documento</h2>
+    <h2>{{ isEditMode ? 'Editar Documento' : 'Formulário de Arquivamento de Documento' }}</h2>
 
     <div class="content-wrapper">
       <form [formGroup]="documentForm" (ngSubmit)="saveDocument()">
@@ -14,8 +14,16 @@
           <!-- Aba 1: Upload e Informações do Arquivo -->
           <p-tabPanel header="Upload e Informações do Arquivo">
             <div class="form-section">
+              <div *ngIf="isEditMode">
+                <label for="currentFile">Arquivo Atual</label>
+                <p>
+                  <a [href]="documentForm.get('link')?.value" target="_blank">
+                    {{ documentForm.get('link')?.value || 'Nenhum arquivo' }}
+                  </a>
+                </p>
+              </div>
               <div>
-                <label for="fileUpload">Upload de Arquivo</label>
+                <label for="fileUpload">{{ isEditMode ? 'Substituir Arquivo (opcional)' : 'Upload de Arquivo' }}</label>
                 <p-fileUpload id="fileUpload" 
                              name="fileUpload" 
                              (onSelect)="onFileSelect($event)" 
@@ -82,7 +90,7 @@
               </div>
               <br>
               <div>
-                <label for="documentNumber">Número do Documento</label>
+                <label for="documentNumber">Título</label>
                 <input id="documentNumber"
                        name="documentNumber"
                        type="text"
@@ -90,7 +98,7 @@
                        formControlName="documentNumber"
                        pInputText
                        class="input-field"
-                       placeholder="Ex: 123/2025"
+                       placeholder="Título"
                        style="width: 100%;">
               </div>
               <br>
@@ -134,7 +142,7 @@
               <br>
               <div>
                 <label for="description">Descrição/Resumo</label>
-                <p-editor [(ngModel)]="text" [style]="{ height: '320px' }" />
+                <p-editor formControlName="description" [style]="{ height: '320px' }"></p-editor>
               </div>
             </div>
           </p-tabPanel>
@@ -145,7 +153,7 @@
                    icon="pi pi-times" 
                    (onClick)="cancel()" 
                    styleClass="p-button-secondary"></p-button>
-          <p-button label="Salvar" 
+          <p-button [label]="isEditMode ? 'Atualizar' : 'Salvar'" 
                    icon="pi pi-check" 
                    type="submit" 
                    [disabled]="documentForm.invalid"></p-button>

@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, 
   { path: 'dashboard', component: PageTableComponent  },
   { path: 'login', component: PageLoginComponent },
-  { path: 'adicionar', component: PageCreateFormComponent  },
+  { path: 'adicionar', component: PageCreateFormComponent }, // Rota para criar
+  { path: 'editar/:id', component: PageCreateFormComponent }, // Rota para editar
   { path: 'arquivos', component: PageArquivosComponent  },
   { path: 'perfil', component: PageUserComponent  }
 

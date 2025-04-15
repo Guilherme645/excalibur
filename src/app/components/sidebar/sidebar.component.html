@@ -1,8 +1,15 @@
 <nav class="sidebar" [class.collapsed]="isCollapsed">
     <header>
       <div class="logo-container">
-        <h1 class="logo-text">All Cortex</h1>
+        <img 
+          src="assets/icon.png" 
+          alt="Logo" 
+          class="logo-image" 
+          [ngClass]="{ 'collapsed-logo': isCollapsed }"
+        />
+        <h1 class="logo-text" *ngIf="!isCollapsed">Hermisys</h1>
       </div>
+      
   </header>
  <!-- Menu Section -->
  <div class="menu-wrapper">
@@ -33,18 +40,24 @@
 </div>
   <!-- Área do usuário -->
   <!-- User Info Section com p-avatar -->
-  <div class="user-info" *ngIf="!isCollapsed">
-    <p-avatar
-      label="AC" 
-      size="large"
-      shape="circle" 
-      styleClass="user-avatar" 
-    ></p-avatar>
-    <div class="user-details">
-      <div class="user-name">Antônio Costa</div>
-      <div class="user-role">Arquivista</div>
-    </div>
+  <!-- Área do usuário -->
+<div class="user-info" [ngClass]="{ 'collapsed-user-info': isCollapsed }">
+  <p-avatar
+    label="AC"
+    [style]="{
+      width: isCollapsed ? '30px' : '50px',
+      height: isCollapsed ? '30px' : '50px',
+      fontSize: isCollapsed ? '12px' : '16px'
+    }"
+    shape="circle"
+    styleClass="user-avatar"
+  ></p-avatar>
+
+  <div class="user-details" *ngIf="!isCollapsed">
+    <div class="user-name">Antônio Costa</div>
+    <div class="user-role">Arquivista</div>
   </div>
+</div>
 
   <!-- Toggle Button -->
   <button class="toggle-btn" (click)="toggleSidebar()">

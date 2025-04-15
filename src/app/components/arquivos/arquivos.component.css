@@ -81,7 +81,7 @@ body {
 
 .result-title {
     color: #1a0dab;
-    padding-right: 500px;}
+    }
 
 .result-title a {
     text-decoration: none; /* Remove o sublinhado no link */
@@ -94,7 +94,6 @@ body {
 
 .result-description {
     color: #555;
-    margin-top: 5px;
 }
 
 
@@ -125,7 +124,6 @@ margin-top: 20px;
 }
 
 .result-description{
-    padding-right: 400px;
 }
 
 .result-link{

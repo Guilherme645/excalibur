@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { ArquivoService, Arquivo } from 'src/app/arquivos.service';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-page-create-form',
@@ -9,10 +12,11 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./page-create-form.component.css'],
   providers: [MessageService]
 })
-export class PageCreateFormComponent {
+export class PageCreateFormComponent implements OnInit {
   documentForm: FormGroup;
   isSidebarCollapsed = false;
-  text: string | undefined;
+  isEditMode = false;
+  arquivoId: string | null = null; // Alterado de number para string
 
   documentTypes = [
     { label: 'Ofício', value: 'Ofício' },
@@ -46,9 +50,11 @@ export class PageCreateFormComponent {
   ];
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private router: Router,
-    private messageService: MessageService
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private arquivoService: ArquivoService
   ) {
     this.documentForm = this.fb.group({
       documentType: ['', Validators.required],
@@ -58,10 +64,55 @@ export class PageCreateFormComponent {
       authorOrigin: ['', Validators.required],
       fileFormat: [''],
       fileSize: [''],
-      fileUpload: [null], // Campo para armazenar o arquivo
+      fileUpload: [null],
       keywords: [[]],
       description: ['']
     });
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          const id = params.get('id');
+          if (id) {
+            this.isEditMode = true;
+            this.arquivoId = id; // Removido o +id, já que id agora é string
+            return this.arquivoService.getArquivoById(this.arquivoId);
+          }
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (arquivo: Arquivo | null) => {
+          if (arquivo) {
+            this.documentForm.patchValue({
+              documentType: arquivo.tipoDocumento,
+              collectionType: arquivo.tipoColecao,
+              documentNumber: arquivo.title,
+              productionDate: new Date(arquivo.dataCriacao),
+              authorOrigin: arquivo.autor,
+              fileFormat: arquivo.formato,
+              keywords: arquivo.palavrasChave,
+              description: arquivo.description,
+              fileUpload: null
+            });
+          }
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao carregar os dados do arquivo.'
+          });
+          this.router.navigate(['/dashboard']);
+        }
+      });
+  }
+
+  stripHtmlTags(html: string): string {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, '').trim();
   }
 
   onFileSelect(event: any) {
@@ -69,7 +120,7 @@ export class PageCreateFormComponent {
     if (file) {
       this.documentForm.patchValue({ fileUpload: file });
       this.documentForm.patchValue({ fileSize: (file.size / 1024 / 1024).toFixed(2) + ' MB' });
-      this.documentForm.patchValue({ fileFormat: file.name.split('.').pop().toUpperCase() }); // Atualiza o formato com base na extensão do arquivo
+      this.documentForm.patchValue({ fileFormat: file.name.split('.').pop().toUpperCase() });
       this.messageService.add({
         severity: 'info',
         summary: 'Arquivo Selecionado',
@@ -87,12 +138,68 @@ export class PageCreateFormComponent {
       });
       return;
     }
-    console.log('Documento salvo:', this.documentForm.value);
-    this.router.navigate(['/documents']);
+
+    const formValue = this.documentForm.value;
+    const baseArquivo = {
+      tipoDocumento: formValue.documentType,
+      tipoColecao: formValue.collectionType,
+      autor: formValue.authorOrigin,
+      formato: formValue.fileFormat,
+      palavrasChave: formValue.keywords,
+      dataCriacao: new Date(formValue.productionDate).toISOString(),
+      title: formValue.documentNumber || 'Sem número',
+      description: this.stripHtmlTags(formValue.description || ''),
+      link: formValue.fileUpload
+        ? `assets/arquivos/${formValue.fileUpload.name}`
+        : formValue.link || 'arquivo_desconhecido.pdf'
+    };
+
+    if (this.isEditMode) {
+      const arquivo: Arquivo = {
+        ...baseArquivo,
+        id: this.arquivoId! // id é string agora
+      };
+      this.arquivoService.updateArquivo(arquivo).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Documento atualizado com sucesso!'
+          });
+          this.router.navigate(['/dashboard']);
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao atualizar o documento.'
+          });
+        }
+      });
+    } else {
+      const novoArquivo: Omit<Arquivo, 'id'> = baseArquivo;
+      this.arquivoService.createArquivo(novoArquivo).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Documento arquivado com sucesso!'
+          });
+          this.router.navigate(['/dashboard']);
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao salvar o documento.'
+          });
+        }
+      });
+    }
   }
 
   cancel() {
-    this.router.navigate(['/documents']);
+    this.router.navigate(['/dashboard']);
   }
 
   toggleSidebar() {

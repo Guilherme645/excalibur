@@ -1,18 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-
-export interface Noticia {
-  id: string;
-  title: string; // Nome do arquivo
-  description: string; // Descrição ou tipo
-  link: string; // Link para visualizar ou baixar
-  pubDate: string; // Data de criação ou modificação
-  faviconUrl?: string; // Ícone do tipo de arquivo (opcional)
-  sourceUrl?: string; // Caminho ou origem
-  categoria: string;
-}
-
+import { Arquivo, ArquivoService } from 'src/app/arquivos.service';
 
 @Component({
   selector: 'app-arquivos',
@@ -20,17 +8,18 @@ export interface Noticia {
   styleUrls: ['./arquivos.component.css']
 })
 export class ArquivosComponent implements OnInit {
-
   termo: string = '';
   categoria: string | null = null;
-  noticias: Noticia[] = [];
+  arquivos: Arquivo[] = [];
   page: number = 0;
   pageSize: number = 7;
   totalItems: number = 0;
+  arquivosFiltrados: Arquivo[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private arquivoService: ArquivoService
   ) {}
 
   ngOnInit(): void {
@@ -39,42 +28,35 @@ export class ArquivosComponent implements OnInit {
       this.categoria = params['categoria'] || null;
       this.page = params['page'] ? +params['page'] : 0;
       this.pageSize = params['pageSize'] ? +params['pageSize'] : 7;
-  
-      this.carregarNoticiasMock();
+
+      this.carregarArquivos();
     });
   }
-  carregarNoticiasMock(): void {
-    const tipos = ['PDF', 'DOCX', 'XLSX', 'Imagem', 'ZIP'];
-    const categorias = ['Relatório', 'Ofício', 'Memorando', 'Contrato', 'Formulário'];
-    const setores = ['Financeiro', 'RH', 'Jurídico', 'Compras', 'TI'];
-  
-    const todasNoticias: Noticia[] = Array.from({ length: 40 }, (_, i) => {
-      const tipo = tipos[i % tipos.length];
-      const categoria = categorias[i % categorias.length];
-      const setor = setores[i % setores.length];
-      const id = `${i + 1}`;
-      const extensao = tipo.toLowerCase();
-      const nomeArquivo = `DOC_${categoria}_${i + 1}.${extensao}`;
-  
-      return {
-        id,
-        title: nomeArquivo,
-        description: `Documento do setor de ${setor}, referente à atividade de ${categoria.toLowerCase()}. Arquivo no formato ${tipo}.`,
-        link: `https://exemplo.com/arquivos/${nomeArquivo}`,
-        pubDate: new Date(2024, i % 12, (i % 28) + 1).toISOString(),
-        faviconUrl: `assets/icons/${extensao}.png`,
-        sourceUrl: `/arquivos/${setor.toLowerCase()}/${categoria.toLowerCase()}/${nomeArquivo}`,
-        categoria
-      };
+
+  carregarArquivos(): void {
+    this.arquivoService.getArquivos().subscribe((dados) => {
+      this.arquivos = dados;
+      this.arquivosFiltrados = this.aplicarFiltros(dados);
+      this.totalItems = this.arquivosFiltrados.length;
+     
     });
-  
-    const start = this.page * this.pageSize;
-    const end = start + this.pageSize;
-  
-    this.totalItems = todasNoticias.length;
-    this.noticias = todasNoticias.slice(start, end);
   }
   
+
+  aplicarFiltros(lista: Arquivo[]): Arquivo[] {
+    return lista.filter((arquivo) => {
+      const matchTermo =
+        this.termo === '' ||
+        arquivo.tipoDocumento.toLowerCase().includes(this.termo.toLowerCase()) ||
+        arquivo.autor.toLowerCase().includes(this.termo.toLowerCase());
+
+      const matchCategoria =
+        !this.categoria || arquivo.tipoColecao.toLowerCase() === this.categoria.toLowerCase();
+
+      return matchTermo && matchCategoria;
+    });
+  }
+
   pesquisarNovamente(): void {
     if (this.termo) {
       this.router.navigate(['/resultados'], {
@@ -83,30 +65,9 @@ export class ArquivosComponent implements OnInit {
     }
   }
 
-  // buscarNoticias(): void {
-  //   this.pesquisaService
-  //     .buscarNoticias(this.termo, this.categoria, this.page, this.pageSize)
-  //     .subscribe((response) => {
-  //       this.noticias = response.content;
-  //       this.totalItems = response.totalElements;
-  //     });
-  // }
-
-  /**
-   * Atualiza os parâmetros de busca ao trocar de página.
-   * @param event Evento disparado pelo <p-paginator>.
-   */
   onPageChange(event: any): void {
     this.page = event.page;
     this.pageSize = event.rows;
-    this.router.navigate(['/resultados'], {
-      queryParams: {
-        termo: this.termo,
-        categoria: this.categoria,
-        page: this.page,
-        pageSize: this.pageSize,
-      },
-    });
   }
+  
 }
-
