@@ -1,0 +1,111 @@
+/* Estilo dos botões */
+.p-button-rounded {
+    width: 35px;
+    height: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  /* Substituímos a cor vermelha (#dc3545) pelo azul (#12619e) */
+  .p-button-danger {
+    color: #fff;
+    background-color: #12619e; /* Cor azul do sidebar */
+    border: none;
+  }
+  
+  /* Estilo para botões primários (caso precise no futuro) */
+  .p-button-primary {
+    color: #fff;
+    background-color: #12619e; /* Cor azul do sidebar */
+    border: none;
+  }
+  
+  /* Estilo da tabela */
+  .custom-table {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  
+  .p-datatable th,
+  .p-datatable td {
+    padding: 10px;
+  }
+  
+  .p-datatable th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .p-datatable th.action-column,
+  .p-datatable td.action-column {
+    text-align: right;
+    padding-right: 20px;
+  }
+  
+  .action-buttons {
+    display: inline-flex;
+    gap: 5px;
+    width: 5px;
+  }
+  
+  h3 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    font-family: Roboto, sans-serif;
+    margin: 0 0 16px;
+  }
+  
+  p {
+    font-size: 14px;
+    padding-bottom: 20px;
+  }
+  
+  td .flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  hr {
+    margin: 1rem 0;
+  }
+  
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .table-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .table-search {
+    position: relative;
+  }
+  
+  .table-search input {
+    padding: 8px 35px 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Substituímos a borda vermelha (red-300) pelo azul (#12619e) */
+  .table-header input:focus {
+    border-color: #12619e !important; /* Cor azul do sidebar */
+    box-shadow: 0 0 0 1px #12619e; /* Sombra opcional para destacar o foco */
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }

@@ -1,0 +1,40 @@
+.cadastro-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input, textarea {
+    width: 100%;
+  }
+  
+  .resultados-container {
+    margin-top: 32px;
+  }
+  
+  .result-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .result-title {
+    margin: 0;
+  }
+  
+  .result-description {
+    margin: 8px 0;
+  }
+  

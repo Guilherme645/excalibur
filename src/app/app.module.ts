@@ -39,6 +39,15 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 import { EditorModule } from 'primeng/editor';
+import { CadastroColecoesComponent } from './components/cadastro-colecoes/cadastro-colecoes.component';
+import { CadastroTiposDocumentosComponent } from './components/cadastro-tipos-documentos/cadastro-tipos-documentos.component';
+import { PageCadastroTipoComponent } from './pages/page-cadastro-tipo/page-cadastro-tipo.component';
+import { PageCadastroColecaoComponent } from './pages/page-cadastro-colecao/page-cadastro-colecao.component';
+import { PageColecoesComponent } from './pages/page-colecoes/page-colecoes.component';
+import { PageTiposComponent } from './pages/page-tipos/page-tipos.component';
+import { TiposDocumentosListComponent } from './components/tipos-documentos-list/tipos-documentos-list.component';
+import { ColecoesListComponent } from './components/colecoes-list/colecoes-list.component';
+
 
 @NgModule({
   declarations: [
@@ -54,7 +63,15 @@ import { EditorModule } from 'primeng/editor';
     PageArquivosComponent,
     HeaderComponent,
     UsuarioComponent,
-    PageUserComponent
+    PageUserComponent,
+    CadastroColecoesComponent,
+    CadastroTiposDocumentosComponent,
+    PageCadastroTipoComponent,
+    PageCadastroColecaoComponent,
+    PageColecoesComponent,
+    PageTiposComponent,
+    TiposDocumentosListComponent,
+    ColecoesListComponent
   ],
   imports: [
     BrowserModule,
