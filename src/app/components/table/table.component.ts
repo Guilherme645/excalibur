@@ -3,6 +3,8 @@ import { Table } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { Arquivo, ArquivoService } from 'src/app/arquivos.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DeleteComponent } from '../delete/delete.component';
 
 @Component({
   selector: 'app-table',
@@ -19,15 +21,17 @@ export class TableComponent implements OnInit {
   pageSize: number = 5;
   totalItems: number = 0;
   termo: string = '';
-  sanitizedDescriptions: { [key: string]: SafeHtml } = {}; // Alterado de number para string
+  sanitizedDescriptions: { [key: string]: SafeHtml } = {}; 
   selectedArquivo: Arquivo | null = null;
   selectedArquivoDescription: SafeHtml | null = null;
   displayDialog: boolean = false;
+  ref!: DynamicDialogRef;
 
   constructor(
     private messageService: MessageService,
     private arquivoService: ArquivoService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -93,25 +97,36 @@ export class TableComponent implements OnInit {
     });
   }
 
+  
   excluirArquivo(arquivo: Arquivo): void {
-    if (confirm('Tem certeza que deseja excluir este arquivo?')) {
-      this.arquivoService.deleteArquivo(arquivo.id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Arquivo Excluído',
-            detail: `O arquivo "${arquivo.tipoDocumento} - ${arquivo.autor}" foi excluído.`
-          });
-          this.carregarTodosArquivos(); // Recarrega os dados do backend
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao excluir o arquivo.'
-          });
-        }
-      });
-    }
+    this.ref = this.dialogService.open(DeleteComponent, {
+      header: 'Confirmação de Exclusão',
+      width: '30%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      data: { itemName: `${arquivo.tipoDocumento} - ${arquivo.autor}` }
+    });
+
+    this.ref.onClose.subscribe((confirmado: boolean) => {
+      if (confirmado) {
+        this.arquivoService.deleteArquivo(arquivo.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Arquivo Excluído',
+              detail: `O arquivo "${arquivo.tipoDocumento} - ${arquivo.autor}" foi excluído.`
+            });
+            this.carregarTodosArquivos();
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: 'Erro ao excluir o arquivo.'
+            });
+          }
+        });
+      }
+    });
   }
 }

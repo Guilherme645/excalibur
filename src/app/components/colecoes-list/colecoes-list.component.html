@@ -1,83 +1,75 @@
 <div class="p-4 mt-6 md:mx-6 md:p-12">
-  <h3>Coleções
-  </h3>
+  <h3>Coleções</h3>
   <p>Lista de coleções disponíveis para visualização e gerenciamento</p>
 
-  <button 
-    pButton 
-    label="Adicionar Coleção" 
-    icon="pi pi-plus" 
-    class="p-button-text" 
-    [routerLink]="['/cadastroColecoes']">
-  </button>
+  <p-button label="Nova Coleção" icon="pi pi-plus" (onClick)="abrirCadastro()"></p-button>
+
   <hr />
+
   <p-toast></p-toast>
 
-<p-table
-  #dt
-  [value]="colecoesFiltradas"
-  [paginator]="true"
-  [rows]="pageSize"
-  [totalRecords]="totalItems"
-  [rowsPerPageOptions]="[5, 10, 20]"
-  (onPageChange)="onPageChange($event)"
-  [responsiveLayout]="'scroll'"
-  dataKey="id"
->
-  <!-- 🔍 Filtro Global -->
-  <ng-template pTemplate="caption">
-    <div class="table-header flex justify-between items-center">
-      Lista de Coleções
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="applyFilterGlobal($event)"
-          placeholder="Buscar..."
-        />
-      </span>
-    </div>
-  </ng-template>
+  <p-table
+    #dt
+    [value]="colecoesFiltradas"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalItems"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    (onPageChange)="onPageChange($event)"
+    dataKey="id"
+    [responsiveLayout]="'scroll'"
+  >
+    <!-- Filtro Global -->
+    <ng-template pTemplate="caption">
+      <div class="table-header flex justify-between items-center">
+        Lista de Coleções
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="applyFilterGlobal($event)"
+            placeholder="Buscar..."
+          />
+        </span>
+      </div>
+    </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Nome</th>
-      <th>Descrição</th>
-   
-      <th>Ações</th>
-    </tr>
-  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-c>
-    <tr>
-      <td>{{ c.nome }}</td>
-      <td><div [innerHTML]="sanitizedDescriptions[c.id]"></div></td>
-      <td>
-        <div class="flex gap-2">
+    <ng-template pTemplate="body" let-c>
+      <tr>
+        <td>{{ c.nome }}</td>
+        <td><div [innerHTML]="sanitizedDescriptions[c.id]"></div></td>
+        <td>
           <button pButton icon="pi pi-eye" class="p-button-text" (click)="visualizarColecao(c)"></button>
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="editarColecao(c)"
+          ></button>
           <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="excluirColecao(c)"></button>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
+        </td>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="5">Nenhuma coleção encontrada.</td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="3">Nenhuma coleção cadastrada.</td></tr>
+    </ng-template>
+  </p-table>
 
-<p-dialog
-  header="Detalhes da Coleção"
-  [(visible)]="displayDialog"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
->
-  <h3>{{ selectedColecao?.nome }}</h3>
-  <p><strong>Palavras-chave:</strong> {{ selectedColecao?.palavrasChave.join(', ') }}</p>
-  <p><strong>Data de Criação:</strong> {{ selectedColecao?.dataCriacao | date:'dd/MM/yyyy' }}</p>
-  <p><strong>Descrição:</strong></p>
-  <div [innerHTML]="selectedDescricao"></div>
-</p-dialog>
+  <p-dialog header="Detalhes da Coleção" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '50vw' }">
+    <h3>{{ selectedColecao?.nome }}</h3>
+    <p><strong>Palavras-chave:</strong> {{ selectedColecao?.palavrasChave.join(', ') }}</p>
+    <p><strong>Data de Criação:</strong> {{ selectedColecao?.dataCriacao | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Descrição:</strong></p>
+    <div [innerHTML]="selectedDescricao"></div>
+  </p-dialog>
+</div>

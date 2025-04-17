@@ -47,7 +47,9 @@ import { PageColecoesComponent } from './pages/page-colecoes/page-colecoes.compo
 import { PageTiposComponent } from './pages/page-tipos/page-tipos.component';
 import { TiposDocumentosListComponent } from './components/tipos-documentos-list/tipos-documentos-list.component';
 import { ColecoesListComponent } from './components/colecoes-list/colecoes-list.component';
-
+import { DialogService } from 'primeng/dynamicdialog'; // ✅ IMPORTAR
+import { DynamicDialogModule } from 'primeng/dynamicdialog'; // ✅ IMPORTAR
+import { DeleteComponent } from './components/delete/delete.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,8 @@ import { ColecoesListComponent } from './components/colecoes-list/colecoes-list.
     PageColecoesComponent,
     PageTiposComponent,
     TiposDocumentosListComponent,
-    ColecoesListComponent
+    ColecoesListComponent,
+    DeleteComponent
   ],
   imports: [
     BrowserModule,
@@ -99,9 +102,13 @@ import { ColecoesListComponent } from './components/colecoes-list/colecoes-list.
     CardModule,
     DividerModule,
     TagModule,
-    EditorModule
+    EditorModule,
+    BrowserModule,
+    BrowserAnimationsModule, // ✅ OBRIGATÓRIO para PrimeNG
+    DynamicDialogModule // ✅ NECESSÁRIO para usar dialogs
+    
   ],
-  providers: [ConfirmationService,MessageService ],
+  providers: [ConfirmationService,MessageService,DialogService ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

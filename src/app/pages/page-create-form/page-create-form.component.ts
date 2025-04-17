@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { ArquivoService, Arquivo } from 'src/app/arquivos.service';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { TiposColecoesService } from 'src/app/tipos-colecoes.service';
 
 @Component({
   selector: 'app-page-create-form',
@@ -16,22 +17,10 @@ export class PageCreateFormComponent implements OnInit {
   documentForm: FormGroup;
   isSidebarCollapsed = false;
   isEditMode = false;
-  arquivoId: string | null = null; // Alterado de number para string
+  arquivoId: string | null = null;
 
-  documentTypes = [
-    { label: 'Ofício', value: 'Ofício' },
-    { label: 'Relatório', value: 'Relatório' },
-    { label: 'Ata', value: 'Ata' },
-    { label: 'Contrato', value: 'Contrato' },
-    { label: 'Outros', value: 'Outros' }
-  ];
-
-  collectionTypes = [
-    { label: 'Administrativa', value: 'Administrativa' },
-    { label: 'Histórica', value: 'Histórica' },
-    { label: 'Técnica', value: 'Técnica' },
-    { label: 'Outros', value: 'Outros' }
-  ];
+  documentTypes: { label: string, value: string }[] = [];
+  collectionTypes: { label: string, value: string }[] = [];
 
   fileFormats = [
     { label: 'PDF', value: 'PDF' },
@@ -54,7 +43,8 @@ export class PageCreateFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private arquivoService: ArquivoService
+    private arquivoService: ArquivoService,
+    private tiposColecoesService: TiposColecoesService
   ) {
     this.documentForm = this.fb.group({
       documentType: ['', Validators.required],
@@ -71,13 +61,29 @@ export class PageCreateFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Carregar tipos de documentos e coleções do serviço
+    this.tiposColecoesService.getDocumentTypes().subscribe(tipos => {
+      this.documentTypes = tipos.map(tipo => ({
+        label: tipo.nome,
+        value: tipo.nome
+      }));
+    });
+
+    this.tiposColecoesService.getCollectionTypes().subscribe(colecoes => {
+      this.collectionTypes = colecoes.map(colecao => ({
+        label: colecao.nome,
+        value: colecao.nome
+      }));
+    });
+
+    // Carregar dados para edição, se necessário
     this.route.paramMap
       .pipe(
         switchMap(params => {
           const id = params.get('id');
           if (id) {
             this.isEditMode = true;
-            this.arquivoId = id; // Removido o +id, já que id agora é string
+            this.arquivoId = id;
             return this.arquivoService.getArquivoById(this.arquivoId);
           }
           return of(null);
@@ -157,7 +163,7 @@ export class PageCreateFormComponent implements OnInit {
     if (this.isEditMode) {
       const arquivo: Arquivo = {
         ...baseArquivo,
-        id: this.arquivoId! // id é string agora
+        id: this.arquivoId!
       };
       this.arquivoService.updateArquivo(arquivo).subscribe({
         next: () => {

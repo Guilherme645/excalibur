@@ -2,6 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CadastroTiposDocumentosComponent } from '../cadastro-tipos-documentos/cadastro-tipos-documentos.component';
+import { TiposColecoesService } from 'src/app/tipos-colecoes.service';
+import { DeleteComponent } from '../delete/delete.component';
+
 
 @Component({
   selector: 'app-tipos-documentos-list',
@@ -23,10 +28,13 @@ export class TiposDocumentosListComponent implements OnInit {
   selectedTipo: any = null;
   selectedDescricao: SafeHtml | null = null;
   sanitizedDescriptions: { [key: string]: SafeHtml } = {};
+  ref!: DynamicDialogRef;
 
   constructor(
+    private messageService: MessageService,
     private sanitizer: DomSanitizer,
-    private messageService: MessageService
+    private dialogService: DialogService,
+    private tiposColecoesService: TiposColecoesService
   ) {}
 
   ngOnInit(): void {
@@ -34,52 +42,10 @@ export class TiposDocumentosListComponent implements OnInit {
   }
 
   carregarTipos(): void {
-    this.tipos = [
-      {
-        id: 1,
-        nome: 'Relatório',
-        descricao: 'Documento técnico que apresenta <strong>dados e análises</strong> sobre determinada atividade.',
-        palavrasChave: ['análise', 'técnico'],
-        dataCriacao: new Date('2024-04-01')
-      },
-      {
-        id: 2,
-        nome: 'Ata',
-        descricao: 'Registro <em>fiel</em> de uma reunião, assembleia ou sessão.',
-        palavrasChave: ['reunião', 'registro'],
-        dataCriacao: new Date('2024-03-01')
-      },
-      {
-        id: 3,
-        nome: 'Ofício',
-        descricao: 'Documento de comunicação <strong>oficial</strong> entre setores ou instituições.',
-        palavrasChave: ['comunicação', 'oficial'],
-        dataCriacao: new Date('2024-02-15')
-      },
-      {
-        id: 4,
-        nome: 'Memorando',
-        descricao: 'Instrumento para comunicação interna com <u>linguagem objetiva</u>.',
-        palavrasChave: ['interno', 'rápido'],
-        dataCriacao: new Date('2024-02-01')
-      },
-      {
-        id: 5,
-        nome: 'Contrato',
-        descricao: 'Acordo formal com cláusulas entre partes interessadas.',
-        palavrasChave: ['jurídico', 'acordo'],
-        dataCriacao: new Date('2024-01-25')
-      },
-      {
-        id: 6,
-        nome: 'Requerimento',
-        descricao: 'Solicitação <strong>formal</strong> a uma autoridade competente.',
-        palavrasChave: ['solicitação', 'formal'],
-        dataCriacao: new Date('2024-01-10')
-      }
-    ];
-
-    this.filtrarTipos();
+    this.tiposColecoesService.getDocumentTypes().subscribe(tipos => {
+      this.tipos = tipos;
+      this.filtrarTipos();
+    });
   }
 
   filtrarTipos(): void {
@@ -126,15 +92,63 @@ export class TiposDocumentosListComponent implements OnInit {
   }
 
   excluirTipo(t: any): void {
-    if (confirm('Tem certeza que deseja excluir este tipo de documento?')) {
-      this.tipos = this.tipos.filter(tipo => tipo.id !== t.id);
-      this.filtrarTipos();
+    this.ref = this.dialogService.open(DeleteComponent, {
+      header: 'Confirmação de Exclusão',
+      width: '30%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      data: { itemName: t.nome }
+    });
 
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Excluído',
-        detail: `Tipo "${t.nome}" removido com sucesso.`
-      });
-    }
+    this.ref.onClose.subscribe((confirmado: boolean) => {
+      if (confirmado) {
+        this.tiposColecoesService.deleteDocumentType(t.id);
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Excluído',
+          detail: `Tipo "${t.nome}" removido com sucesso.`
+        });
+      }
+    });
+  }
+
+  abrirCadastro(): void {
+    this.ref = this.dialogService.open(CadastroTiposDocumentosComponent, {
+      width: '40%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: {}
+    });
+
+    this.ref.onClose.subscribe((tipo: any) => {
+      if (tipo) {
+        if (tipo.id && this.tipos.some(t => t.id === tipo.id)) {
+          this.tiposColecoesService.updateDocumentType(tipo);
+        } else {
+          this.tiposColecoesService.addDocumentType(tipo);
+        }
+      }
+    });
+  }
+
+  editarTipo(t: any): void {
+    this.ref = this.dialogService.open(CadastroTiposDocumentosComponent, {
+      width: '40%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: { tipo: t }
+    });
+
+    this.ref.onClose.subscribe((tipo: any) => {
+      if (tipo) {
+        if (tipo.id && this.tipos.some(t => t.id === tipo.id)) {
+          this.tiposColecoesService.updateDocumentType(tipo);
+        } else {
+          this.tiposColecoesService.addDocumentType(tipo);
+        }
+      }
+    });
   }
 }

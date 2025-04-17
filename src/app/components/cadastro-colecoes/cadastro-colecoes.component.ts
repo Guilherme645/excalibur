@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-cadastro-colecoes',
@@ -11,12 +11,14 @@ import { Router } from '@angular/router';
 })
 export class CadastroColecoesComponent implements OnInit {
   colecaoForm: FormGroup;
-  colecoes: { nome: string; descricao: string }[] = [];
+  isEditing: boolean = false;
+  colecaoId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
-    private router: Router
+    private ref: DynamicDialogRef,
+    private config: DynamicDialogConfig
   ) {
     this.colecaoForm = this.fb.group({
       nome: ['', Validators.required],
@@ -24,35 +26,39 @@ export class CadastroColecoesComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
-  salvar(): void {
-    if (this.colecaoForm.valid) {
-      this.colecoes.push(this.colecaoForm.value);
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Coleção Cadastrada',
-        detail: `A coleção "${this.colecaoForm.value.nome}" foi adicionada com sucesso!`
+  ngOnInit(): void {
+    // Verifica se há dados passados (edição)
+    if (this.config.data && this.config.data.colecao) {
+      this.isEditing = true;
+      this.colecaoId = this.config.data.colecao.id;
+      this.colecaoForm.patchValue({
+        nome: this.config.data.colecao.nome,
+        descricao: this.config.data.colecao.descricao
       });
-
-      this.colecaoForm.reset();
-
-      // Aguarda o toast aparecer antes de redirecionar
-      setTimeout(() => {
-        this.router.navigate(['/listColecoes']);
-      }, 1000);
     }
   }
 
-  remover(index: number): void {
-    const removida = this.colecoes[index].nome;
-    this.colecoes.splice(index, 1);
+  salvar(): void {
+    if (this.colecaoForm.valid) {
+      const formValue = this.colecaoForm.value;
+      const colecao = {
+        id: this.isEditing ? this.colecaoId : Math.floor(Math.random() * 1000000), // Mantém ID existente ou gera novo
+        nome: formValue.nome,
+        descricao: formValue.descricao || '',
+        palavrasChave: this.isEditing ? this.config.data.colecao.palavrasChave : [], // Mantém palavras-chave existentes ou vazio
+        dataCriacao: this.isEditing ? this.config.data.colecao.dataCriacao : new Date() // Mantém data ou usa nova
+      };
 
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Coleção Removida',
-      detail: `A coleção "${removida}" foi excluída.`
-    });
+      this.messageService.add({
+        severity: 'success',
+        summary: this.isEditing ? 'Coleção Atualizada' : 'Coleção Cadastrada',
+        detail: `A coleção "${formValue.nome}" foi ${this.isEditing ? 'atualizada' : 'adicionada'} com sucesso!`
+      });
+
+      // Fecha o dialog e passa a coleção (nova ou atualizada)
+      this.ref.close(colecao);
+
+      this.colecaoForm.reset();
+    }
   }
 }

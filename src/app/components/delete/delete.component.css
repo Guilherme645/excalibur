@@ -1,0 +1,26 @@
+.delete-pasta-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .delete-pasta-container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .p-button-danger {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+  }
+  
+  .p-button-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }

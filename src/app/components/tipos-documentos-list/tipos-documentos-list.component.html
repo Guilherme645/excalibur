@@ -2,13 +2,8 @@
   <h3>Modelos de Arquivos</h3>
   <p>Lista de modelos de arquivos disponíveis para visualização e gerenciamento</p>
 
-  <button 
-    pButton 
-    label="Adicionar Modelo" 
-    icon="pi pi-plus" 
-    class="p-button-text" 
-    [routerLink]="['/cadastrotipos']">
-  </button>
+  <p-button label="Novo Modelo" icon="pi pi-plus" (onClick)="abrirCadastro()"></p-button>
+
   <hr />
 
   <p-toast></p-toast>
@@ -54,6 +49,12 @@
         <td><div [innerHTML]="sanitizedDescriptions[t.id]"></div></td>
         <td>
           <button pButton icon="pi pi-eye" class="p-button-text" (click)="visualizarTipo(t)"></button>
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="editarTipo(t)"
+          ></button>
           <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="excluirTipo(t)"></button>
         </td>
       </tr>

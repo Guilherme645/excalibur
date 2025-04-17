@@ -7,7 +7,7 @@
           class="logo-image" 
           [ngClass]="{ 'collapsed-logo': isCollapsed }"
         />
-        <h1 class="logo-text" *ngIf="!isCollapsed">Archisis</h1>
+        <h1 class="logo-text" *ngIf="!isCollapsed">ARCHSYS</h1>
       </div>
       
   </header>
@@ -63,6 +63,7 @@
         <ul *ngIf="isArquivosExpanded && !isCollapsed" class="submenu">
           <li *ngFor="let child of item.children">
             <a [routerLink]="child.route" routerLinkActive="active-link">
+              <i [class]="child.icon" style="margin-right: 8px;"></i>
               <span class="nav-text">{{ child.label }}</span>
             </a>
           </li>

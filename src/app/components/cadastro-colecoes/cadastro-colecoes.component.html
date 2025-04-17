@@ -1,36 +1,42 @@
-<p-toast></p-toast>
+<div class="p-4 mt-6 md:mx-6 md:p-12">
+  <h3>{{ isEditing ? 'Edição de Coleção' : 'Cadastro de Coleções' }}</h3>
+  <p>Formulário para {{ isEditing ? 'edição' : 'cadastro' }} de coleções</p>
 
-<div class="cadastro-container">
-  <h2>Cadastro de Coleções</h2>
+  <hr />
+  <p-toast></p-toast>
 
-  <form [formGroup]="colecaoForm" (ngSubmit)="salvar()" class="formulario">
-    <div class="form-group">
-      <label for="nome">Nome da Coleção</label>
-      <input
-        pInputText
-        id="nome"
-        formControlName="nome"
-        placeholder="Digite o nome da coleção"
-      />
-    </div>
+  <div class="cadastro-container">
+    <h2>{{ isEditing ? 'Editar Coleção' : 'Cadastrar Coleção' }}</h2>
 
-    <div class="form-group">
-      <label for="descricao">Descrição</label>
-      <textarea
-        pInputTextarea
-        id="descricao"
-        formControlName="descricao"
-        rows="3"
-        placeholder="Descrição opcional"
-      ></textarea>
-    </div>
+    <form [formGroup]="colecaoForm" (ngSubmit)="salvar()" class="formulario">
+      <div class="form-group">
+        <label for="nome">Nome da Coleção</label>
+        <input
+          pInputText
+          id="nome"
+          formControlName="nome"
+          placeholder="Digite o nome da coleção"
+        />
+      </div>
 
-    <p-button
-      label="Salvar"
-      type="submit"
-      icon="pi pi-check"
-      class="p-button-success"
-      [disabled]="colecaoForm.invalid"
-    ></p-button>
-  </form>
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea
+          pInputTextarea
+          id="descricao"
+          formControlName="descricao"
+          rows="3"
+          placeholder="Descrição opcional"
+        ></textarea>
+      </div>
+
+      <p-button
+        [label]="isEditing ? 'Atualizar' : 'Salvar'"
+        type="submit"
+        icon="pi pi-check"
+        class="p-button-success"
+        [disabled]="colecaoForm.invalid"
+      ></p-button>
+    </form>
+  </div>
 </div>

@@ -2,6 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CadastroColecoesComponent } from '../cadastro-colecoes/cadastro-colecoes.component';
+import { TiposColecoesService } from 'src/app/tipos-colecoes.service';
+import { DeleteComponent } from '../delete/delete.component';
 
 @Component({
   selector: 'app-colecoes-list',
@@ -22,10 +26,13 @@ export class ColecoesListComponent implements OnInit {
   displayDialog: boolean = false;
   selectedColecao: any = null;
   selectedDescricao: SafeHtml | null = null;
+  ref!: DynamicDialogRef;
 
   constructor(
     private messageService: MessageService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private dialogService: DialogService,
+    private tiposColecoesService: TiposColecoesService
   ) {}
 
   ngOnInit(): void {
@@ -33,52 +40,10 @@ export class ColecoesListComponent implements OnInit {
   }
 
   carregarColecoes(): void {
-    this.colecoes = [
-      {
-        id: 1,
-        nome: 'Administrativa',
-        descricao: 'Conjunto de <strong>documentos administrativos</strong> e operacionais.',
-        palavrasChave: ['administração', 'ofícios'],
-        dataCriacao: new Date('2024-01-01')
-      },
-      {
-        id: 2,
-        nome: 'Histórica',
-        descricao: 'Documentos que fazem parte do <em>acervo histórico</em> da instituição.',
-        palavrasChave: ['história', 'memória'],
-        dataCriacao: new Date('2024-02-01')
-      },
-      {
-        id: 3,
-        nome: 'Técnica',
-        descricao: 'Manuais, procedimentos e projetos técnicos.',
-        palavrasChave: ['técnico', 'manual'],
-        dataCriacao: new Date('2024-03-01')
-      },
-      {
-        id: 4,
-        nome: 'Financeira',
-        descricao: 'Documentos relacionados à movimentação financeira.',
-        palavrasChave: ['balanço', 'contabilidade'],
-        dataCriacao: new Date('2024-04-01')
-      },
-      {
-        id: 5,
-        nome: 'Jurídica',
-        descricao: 'Pareceres, contratos e processos legais.',
-        palavrasChave: ['contrato', 'legal'],
-        dataCriacao: new Date('2024-05-01')
-      },
-      {
-        id: 6,
-        nome: 'Comunicação Institucional',
-        descricao: 'Materiais de comunicação e campanhas.',
-        palavrasChave: ['campanha', 'divulgação'],
-        dataCriacao: new Date('2024-06-01')
-      }
-    ];
-
-    this.filtrarEPaginar();
+    this.tiposColecoesService.getCollectionTypes().subscribe(colecoes => {
+      this.colecoes = colecoes;
+      this.filtrarEPaginar();
+    });
   }
 
   filtrarEPaginar(): void {
@@ -125,14 +90,63 @@ export class ColecoesListComponent implements OnInit {
   }
 
   excluirColecao(c: any): void {
-    if (confirm('Tem certeza que deseja excluir esta coleção?')) {
-      this.colecoes = this.colecoes.filter(col => col.id !== c.id);
-      this.filtrarEPaginar();
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Coleção Excluída',
-        detail: `A coleção "${c.nome}" foi excluída.`
-      });
-    }
+    this.ref = this.dialogService.open(DeleteComponent, {
+      header: 'Confirmação de Exclusão',
+      width: '30%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      data: { itemName: c.nome }
+    });
+
+    this.ref.onClose.subscribe((confirmado: boolean) => {
+      if (confirmado) {
+        this.tiposColecoesService.deleteCollectionType(c.id);
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Coleção Excluída',
+          detail: `A coleção "${c.nome}" foi excluída.`
+        });
+      }
+    });
+  }
+
+  abrirCadastro(): void {
+    this.ref = this.dialogService.open(CadastroColecoesComponent, {
+      width: '40%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: {}
+    });
+
+    this.ref.onClose.subscribe((colecao: any) => {
+      if (colecao) {
+        if (colecao.id && this.colecoes.some(c => c.id === colecao.id)) {
+          this.tiposColecoesService.updateCollectionType(colecao);
+        } else {
+          this.tiposColecoesService.addCollectionType(colecao);
+        }
+      }
+    });
+  }
+
+  editarColecao(c: any): void {
+    this.ref = this.dialogService.open(CadastroColecoesComponent, {
+      width: '40%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: { colecao: c }
+    });
+
+    this.ref.onClose.subscribe((colecao: any) => {
+      if (colecao) {
+        if (colecao.id && this.colecoes.some(c => c.id === colecao.id)) {
+          this.tiposColecoesService.updateCollectionType(colecao);
+        } else {
+          this.tiposColecoesService.addCollectionType(colecao);
+        }
+      }
+    });
   }
 }

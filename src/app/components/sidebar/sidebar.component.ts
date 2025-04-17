@@ -27,9 +27,7 @@ export class SidebarComponent {
 
   menuItems = [
     { label: 'Busca', icon: 'pi pi-search', route: '/arquivos' },
-
     { label: 'Arquivos', icon: 'pi pi-book', route: '/dashboard' },
-      
     {
       label: 'Identificações',
       icon: 'pi pi-tags',
@@ -38,19 +36,9 @@ export class SidebarComponent {
         { label: 'Coleções', route: '/listColecoes', icon: 'pi pi-folder-open' },
         { label: 'Modelos', route: '/listtipos', icon: 'pi pi-clone' }
       ]
-    }
-    ,
-    
-  
-    //  { label: 'Serviços', icon: 'pi pi-cog', route: '/adicionar' },
-
-     { label: 'Conta', icon: 'pi pi-user', route: '/perfil' },
-
-    
-  
-
+    },
+    { label: 'Conta', icon: 'pi pi-user', route: '/perfil' },
     { label: 'Sair', icon: 'pi pi-sign-out', route: '/login' }
-
   ];
 }
 
