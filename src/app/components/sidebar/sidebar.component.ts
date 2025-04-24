@@ -29,7 +29,7 @@ export class SidebarComponent {
     { label: 'Busca', icon: 'pi pi-search', route: '/arquivos' },
     { label: 'Arquivos', icon: 'pi pi-book', route: '/dashboard' },
     {
-      label: 'Identificações',
+      label: 'tabelas',
       icon: 'pi pi-tags',
       route: '/dashboard',
       children: [

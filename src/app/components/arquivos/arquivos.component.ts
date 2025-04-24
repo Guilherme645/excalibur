@@ -14,7 +14,6 @@ export class ArquivosComponent implements OnInit {
   page: number = 0;
   pageSize: number = 7;
   totalItems: number = 0;
-  arquivosFiltrados: Arquivo[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -34,40 +33,51 @@ export class ArquivosComponent implements OnInit {
   }
 
   carregarArquivos(): void {
-    this.arquivoService.getArquivos().subscribe((dados) => {
-      this.arquivos = dados;
-      this.arquivosFiltrados = this.aplicarFiltros(dados);
-      this.totalItems = this.arquivosFiltrados.length;
-     
-    });
-  }
-  
-
-  aplicarFiltros(lista: Arquivo[]): Arquivo[] {
-    return lista.filter((arquivo) => {
-      const matchTermo =
-        this.termo === '' ||
-        arquivo.tipoDocumento.toLowerCase().includes(this.termo.toLowerCase()) ||
-        arquivo.autor.toLowerCase().includes(this.termo.toLowerCase());
-
-      const matchCategoria =
-        !this.categoria || arquivo.tipoColecao.toLowerCase() === this.categoria.toLowerCase();
-
-      return matchTermo && matchCategoria;
-    });
+    this.arquivoService
+      .getArquivos(this.page, this.pageSize, this.termo, this.categoria)
+      .subscribe({
+        next: (dados) => {
+          this.arquivos = dados;
+          this.arquivoService.getTotalItems(this.termo, this.categoria).subscribe({
+            next: (total) => {
+              this.totalItems = total;
+            },
+            error: (error) => {
+              console.error('Error fetching total items:', error);
+              this.totalItems = 0;
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error fetching arquivos:', error);
+          this.arquivos = [];
+        }
+      });
   }
 
   pesquisarNovamente(): void {
-    if (this.termo) {
-      this.router.navigate(['/resultados'], {
-        queryParams: { termo: this.termo, page: 0, pageSize: this.pageSize },
-      });
-    }
+    this.router.navigate(['/resultados'], {
+      queryParams: {
+        termo: this.termo || null,
+        categoria: this.categoria || null,
+        page: 0,
+        pageSize: this.pageSize
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   onPageChange(event: any): void {
     this.page = event.page;
     this.pageSize = event.rows;
+    this.router.navigate(['/resultados'], {
+      queryParams: {
+        termo: this.termo || null,
+        categoria: this.categoria || null,
+        page: this.page,
+        pageSize: this.pageSize
+      },
+      queryParamsHandling: 'merge'
+    });
   }
-  
 }

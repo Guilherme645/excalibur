@@ -1,39 +1,45 @@
 <div class="resultados-container">
   <!-- Componente de cabeçalho com filtros -->
   <app-header></app-header>
-  <div *ngFor="let arquivo of arquivosFiltrados.slice(page * pageSize, (page + 1) * pageSize)" class="result-item">
-  
-  <!-- Título do arquivo -->
-  <h2 class="result-title">
-    <a [href]="arquivo.link" target="_blank">
-      {{ arquivo.tipoDocumento }} - {{ arquivo.title }}
-    </a>
-  </h2>
-  
 
-  <!-- Descrição do arquivo -->
-  <p class="result-description">
-   <strong>Arquivo da coleção</strong>  {{ arquivo.tipoColecao }} no formato {{ arquivo.formato }}. <br>
-    <strong>Descrição</strong> {{ arquivo.description }}. <br>
-   <strong>Palavras-chave: </strong> {{ arquivo.palavrasChave.join(', ') }}
-  </p>
-
-  <!-- Informações adicionais -->
-  <div class="source-info">
-    <img
-      *ngIf="arquivo.formato"
-      [src]="'assets/icons/' + arquivo.formato.toLowerCase() + '.png'"
-      alt="Ícone do arquivo"
-      class="favicon"
-    />
-    <span class="source-link">
-      Criado em: {{ arquivo.dataCriacao | date:'dd/MM/yyyy' }}
-    </span>
+  <!-- Mensagem para quando não há resultados -->
+  <div *ngIf="arquivos.length === 0" class="no-results">
+    <p>Nenhum arquivo encontrado para os filtros selecionados.</p>
   </div>
 
-</div>
+  <!-- Lista de arquivos -->
+  <div *ngFor="let arquivo of arquivos" class="result-item">
+    <!-- Título do arquivo -->
+    <h2 class="result-title">
+      <a [href]="arquivo.link || '#'" target="_blank">
+        {{ arquivo.tipoDocumento }} - {{ arquivo.title }}
+      </a>
+    </h2>
+
+    <!-- Descrição do arquivo -->
+    <p class="result-description">
+      <strong>Arquivo da coleção</strong> {{ arquivo.tipoColecao }} no formato {{ arquivo.formato }}. <br>
+      <strong>Descrição</strong> {{ arquivo.description || 'Sem descrição disponível' }}. <br>
+      <strong>Palavras-chave: </strong> {{ arquivo.palavrasChave.length ? arquivo.palavrasChave.join(', ') : 'Nenhuma' }}
+    </p>
+
+    <!-- Informações adicionais -->
+    <div class="source-info">
+      <img
+        *ngIf="arquivo.formato"
+        [src]="'assets/icons/' + arquivo.formato.toLowerCase() + '.png'"
+        alt="Ícone do arquivo"
+        class="favicon"
+        
+      />
+      <span class="source-link">
+        Criado em: {{ arquivo.dataCriacao | date:'dd/MM/yyyy' }}
+      </span>
+    </div>
+  </div>
+
   <!-- Paginação -->
-  <div class="pagination-container">
+  <div class="pagination-container" *ngIf="totalItems > 0">
     <p-paginator
       [rows]="pageSize"
       [totalRecords]="totalItems"
@@ -42,3 +48,4 @@
       styleClass="custom-paginator"
     ></p-paginator>
   </div>
+</div>

@@ -1,0 +1,26 @@
+[
+    {
+      "id": "1",
+      "tipoDocumento": "PDF",
+      "tipoColecao": "Artigos",
+      "autor": "João",
+      "formato": "pdf",
+      "palavrasChave": ["teste", "angular"],
+      "dataCriacao": "2025-04-24T10:00:00.000Z",
+      "title": "Documento de Teste",
+      "description": "Descrição do documento",
+      "link": "http://exemplo.com"
+    },
+    {
+      "id": "2",
+      "tipoDocumento": "DOC",
+      "tipoColecao": "Relatórios",
+      "autor": "Maria",
+      "formato": "docx",
+      "palavrasChave": ["relatório", "angular"],
+      "dataCriacao": "2025-04-23T15:00:00.000Z",
+      "title": "Relatório Anual",
+      "description": "Relatório de 2025",
+      "link": "http://exemplo.com/relatorio"
+    }
+  ]
